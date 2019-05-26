@@ -45,6 +45,12 @@ public class Zona implements Serializable {
 		this.gestor = gestor;
 	}
 
+	public Zona(String idZona2, ZonaEstado zEstado2, Gestor gestor) {
+		this.idZona = idZona2;
+		this.zEstado = zEstado2;
+		this.gestor = gestor;
+	}
+
 	public String getIdZona() {
 		return idZona;
 	}

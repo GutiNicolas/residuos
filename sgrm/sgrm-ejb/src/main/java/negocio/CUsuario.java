@@ -51,6 +51,24 @@ public class CUsuario implements CUsuarioRemote, CUsuarioLocal {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	@Override
+    public boolean altaGestor(String nombre, String apellido, String nickAdmin) {
+    	return mem.altaGestor(nombre, apellido, nickAdmin);
+    }
+    
+    @Override
+    public boolean altaZonaGestor(String idZona, String colorZona, String mail) {
+    	ZonaEstado zEstado = null;
+		if (colorZona == "rojo") {
+			zEstado = ZonaEstado.rojo;
+		} else if (colorZona == "amarillo") {
+			zEstado = ZonaEstado.amarillo;
+		} else {
+			zEstado = ZonaEstado.verde;
+		}
+    	return mem.altaZonaGestor(idZona, zEstado, mail);
+    }
     
     
 //    @Override

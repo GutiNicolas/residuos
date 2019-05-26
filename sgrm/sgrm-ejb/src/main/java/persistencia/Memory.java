@@ -10,9 +10,12 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import negocio.Administrador;
 import negocio.Final;
 import negocio.Gestor;
 import negocio.Usuario;
+import negocio.Zona;
+import negocio.ZonaEstado;
 
 /**
  * Session Bean implementation class Memory
@@ -26,6 +29,7 @@ public class Memory implements MemoryRemote, MemoryLocal {
 	@PersistenceContext(unitName= "sgrm-pu")
 	private EntityManager manager;
 	private List<Usuario> usuarios;
+	private List<Gestor> gestores;
 	
 	public Memory() {
 		// TODO Auto-generated constructor stub
@@ -39,7 +43,7 @@ public class Memory implements MemoryRemote, MemoryLocal {
 	public Usuario encontrarUsuario(String mail) {
 		Final usuFinal = (Final) manager.find(Usuario.class, mail);
 		if (usuFinal==null) {
-			Gestor usuGestor = manager.find(Gestor.class, mail);
+			Administrador usuGestor = (Administrador) manager.find(Usuario.class, mail);
 			return usuGestor;
 		} else {
 			return usuFinal;
@@ -80,6 +84,30 @@ public class Memory implements MemoryRemote, MemoryLocal {
 
 	public void setUsuarios(List<Usuario> usuarios) {
 		this.usuarios = usuarios;
+	}
+
+	@Override
+	public boolean altaGestor(String nombre, String apellido, String nickAdmin) {
+		boolean res = false;
+		Administrador admin = manager.find(Administrador.class, nickAdmin);
+		Gestor usu = new Gestor(nombre, apellido, admin);
+		manager.persist(usu);
+		if (manager.find(Gestor.class, nombre) != null) {
+			res = true;
+		}
+		return res;
+	}
+
+	@Override
+	public boolean altaZonaGestor(String idZona, ZonaEstado zEstado, String mail) {
+		boolean res = false;
+		Gestor usuGestor = manager.find(Gestor.class, mail);
+		Zona zonaGestor = new Zona(idZona, zEstado, usuGestor);
+		manager.persist(zonaGestor);
+		if (manager.find(Zona.class, idZona) != null) {
+			res = true;
+		}
+		return res;
 	}
 
 }
