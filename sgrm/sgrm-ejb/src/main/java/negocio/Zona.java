@@ -15,7 +15,7 @@ public class Zona implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	private long idZona;
+	private String idZona;
 	private ZonaEstado zEstado;
 	
 	@OneToMany(mappedBy = "zona")
@@ -29,14 +29,14 @@ public class Zona implements Serializable {
 
 	public Zona() {
 		super();
-		this.idZona = 0;
+		this.idZona = null;
 		this.zEstado = null;
 		this.contenedor = null;
 		this.camiones = null;
 		this.gestor = null;
 	}
 	
-	public Zona(long idZona, ZonaEstado zEstado, List<Contenedor> contenedor, List<Camion> camiones, Gestor gestor) {
+	public Zona(String idZona, ZonaEstado zEstado, List<Contenedor> contenedor, List<Camion> camiones, Gestor gestor) {
 		super();
 		this.idZona = idZona;
 		this.zEstado = zEstado;
@@ -45,11 +45,11 @@ public class Zona implements Serializable {
 		this.gestor = gestor;
 	}
 
-	public long getIdZona() {
+	public String getIdZona() {
 		return idZona;
 	}
 
-	public void setIdZona(long idZona) {
+	public void setIdZona(String idZona) {
 		this.idZona = idZona;
 	}
 
