@@ -58,7 +58,7 @@ public class CUsuario implements CUsuarioRemote, CUsuarioLocal {
     }
     
     @Override
-    public boolean altaZonaGestor(String idZona, String colorZona, String mail) {
+    public boolean altaZonaGestor(long idZona, String colorZona, String mail) {
     	ZonaEstado zEstado = null;
 		if (colorZona == "rojo") {
 			zEstado = ZonaEstado.rojo;

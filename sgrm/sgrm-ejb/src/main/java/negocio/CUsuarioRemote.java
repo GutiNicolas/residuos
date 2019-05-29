@@ -13,6 +13,6 @@ public interface CUsuarioRemote {
 
 	public abstract boolean altaGestor(String nombre, String apellido, String nickAdmin);
 
-	public abstract boolean altaZonaGestor(String idZona, String colorZona, String mail);
+	public abstract boolean altaZonaGestor(long idZona, String colorZona, String mail);
 
 }

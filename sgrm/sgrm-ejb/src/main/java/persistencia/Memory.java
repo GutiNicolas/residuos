@@ -8,6 +8,8 @@ import javax.ejb.Startup;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 import negocio.Administrador;
@@ -26,8 +28,10 @@ import negocio.ZonaEstado;
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 public class Memory implements MemoryRemote, MemoryLocal {
 	
-	@PersistenceContext(unitName= "sgrm-pu")
-	private EntityManager manager;
+	//@PersistenceContext(unitName= "sgrm-pu")
+	//private EntityManager manager;
+	EntityManagerFactory emf = Persistence.createEntityManagerFactory("sgrm-pu");
+	EntityManager manager = emf.createEntityManager();
 	private List<Usuario> usuarios;
 	private List<Gestor> gestores;
 	
@@ -99,7 +103,7 @@ public class Memory implements MemoryRemote, MemoryLocal {
 	}
 
 	@Override
-	public boolean altaZonaGestor(String idZona, ZonaEstado zEstado, String mail) {
+	public boolean altaZonaGestor(long idZona, ZonaEstado zEstado, String mail) {
 		boolean res = false;
 		Gestor usuGestor = manager.find(Gestor.class, mail);
 		Zona zonaGestor = new Zona(idZona, zEstado, usuGestor);

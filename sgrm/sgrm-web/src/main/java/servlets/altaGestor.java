@@ -39,7 +39,7 @@ private static final long serialVersionUID = 1L;
 		System.out.println("exito:"+exito);
 		RequestDispatcher rl;
 		if (exito) {
-			String idZona = "probando"; // ToDo: obtener id zona del mapa 
+			long idZona = 1; // ToDo: obtener id zona del mapa 
 			String colorZona = "verde"; // ToDo: Obtener color zona del mapa
 			boolean exitoZona = cur.altaZonaGestor(idZona, colorZona, mail);
 			if (exitoZona) {

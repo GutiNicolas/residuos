@@ -97,13 +97,32 @@
             <scope>test</scope>               
         </dependency>
         
+        <dependency>
+        	<groupId>javax</groupId>
+        	<artifactId>javaee-api</artifactId>
+        	<version>8.0.1-b5</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 		<dependency>
 		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
-		    <version>42.2.5.jre7</version>
+		    <version>42.2.5</version>
 		</dependency>
+		 <dependency>
+        	<groupId>org.eclipse.persistence</groupId>
+        	<artifactId>eclipselink</artifactId>
+        	<version>2.5.0</version>
+        </dependency>
+        <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-jaxb-provider</artifactId>
+        <version>3.0.16.Final</version>
+</dependency>
 
+        <dependency>
+        	<groupId>org.hibernate</groupId>
+        	<artifactId>hibernate-core</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
