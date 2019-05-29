@@ -17,6 +17,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
    	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"><meta content="width=device-width, initial-scale=1" name="viewport" />
 	<link rel="stylesheet" href="home.css">
+	<script src="qrcode.js"></script>
 	<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
 </head>
 <body>
@@ -37,17 +38,17 @@
   <label for="exampleFormControlSelect1">Tipo de almacenamiento</label>
     <select class="form-control" id="tipocont">
       <option value="None">Ninguno</option>
-      <option value="Pilas">Pilas</option>
-      <option value="Papel">Papel</option>
-      <option value="Plasticos">Plasticos</option>
-      <option value="Carton">Organico</option>
-      <option value="Vidrio">Vidrio</option>
+      <option value="1">Pilas</option>
+      <option value="2">Papel</option>
+      <option value="0">Plasticos</option>
+      <option value="3">Organico</option>
+      <option value="4">Vidrio</option>
       
     </select>
-	<br>
+	<br><br><br><div id="codigoqr"></div>
  
   
-</form>
+							</form> 
 						</div>
 					</div>
 				</div>
@@ -270,8 +271,9 @@ function pertenece (e, tipoVal) {
 			if (turf.booleanContains(zonaturf, puntoturf)) {
 				areturn = zon.getId();
 				splited = zon.getId().split(".");
-				e.set('nombre_con', tipoVal);
-            	e.set('idzona', splited[1]);
+				e.set('tresiduos', tipoVal);
+				e.set('cestado', 2);
+            	e.set('zona_idzona', splited[1]);
                 transactWFS('insert', e);
 				return;
 			}
@@ -280,6 +282,30 @@ function pertenece (e, tipoVal) {
 	layerWFS.getSource().clear();
     layerWFS.getSource().refresh();
 	});
+}
+
+function generarQR() {
+	var ccc = document.getElementById('codigoqr');
+    ccc.innerHTML = '';
+    var contens = sourceWFS.getFeatures();
+    var max = 0;
+    for(var j = 0; j < contens.length; j++){
+        var cn = contens[j];
+        var cnv = cn.getId().split(".");
+		if(max < cnv[1] ){
+			max = cnv[1];
+		}
+    }
+    max++;
+   // USAR max+1
+    let qrcode = new QRCode("codigoqr", {
+		text: "http://localhost:8080/sgrm-web/reportarContenedor?id="+max,
+		width: 177,
+		height: 177,
+		colorDark: "#37323E",
+		colorLight: "#FBFFF1",
+		correctLevel: QRCode.CorrectLevel.H
+        });
 }
 
 
@@ -328,11 +354,14 @@ $('button').click(function () {
                 var tipoSelec = document.getElementById('tipocont');
                 var tipoVal = tipoSelec.value;
                 if (tipoVal !== 'None') {
-                    pertenece(e.feature, tipoVal);                  
+                    pertenece(e.feature, tipoVal);
+                    generarQR();                  
                 } else {
                 	alert("Seleccione un tipo para el contenedor");   
                 	          	
-                }                                
+                }
+                layerWFS.getSource().clear();
+                layerWFS.getSource().refresh();                                
             });
             break;
 
@@ -375,8 +404,28 @@ $('button').click(function () {
             interaction = new ol.interaction.Select();
             interaction.getFeatures().on('add', function (e) {
             //todo
+            	var tipore;
+            	switch (e.target.item(0).get('tresiduos')) {
+            	case 0:
+					tipore= "Plastico";
+                	break;
+            	case 1:
+            		tipore= "Pilas";
+                	break;
+            	case 2:
+            		tipore= "Papel";
+            		break;
+            	case 3:
+            		tipore= "Organico";
+                	break;
+            	case 4:
+            		tipore= "Vidrio";
+                	break;
+                
+                	
+            	}
                 var info = document.getElementById('infoCont');
-                info.innerHTML = e.target.item(0).getId() + '  TIPO: ' + e.target.item(0).get('nombre_con') + '  ID Zona: ' + e.target.item(0).get('idzona');
+                info.innerHTML = e.target.item(0).getId() + '  TIPO: ' + tipore + '  ID Zona: ' + e.target.item(0).get('zona_idzona');
             });
             map.addInteraction(interaction);
             break;
