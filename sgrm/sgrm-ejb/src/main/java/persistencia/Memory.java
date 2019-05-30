@@ -10,6 +10,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+//import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 
 import negocio.Administrador;
@@ -28,8 +29,8 @@ import negocio.ZonaEstado;
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 public class Memory implements MemoryRemote, MemoryLocal {
 	
-	//@PersistenceContext(unitName= "sgrm-pu")
-	//private EntityManager manager;
+//	@PersistenceContext(unitName= "sgrm-pu")
+//	private EntityManager manager;
 	EntityManagerFactory emf = Persistence.createEntityManagerFactory("sgrm-pu");
 	EntityManager manager = emf.createEntityManager();
 	private List<Usuario> usuarios;
@@ -52,6 +53,13 @@ public class Memory implements MemoryRemote, MemoryLocal {
 		} else {
 			return usuFinal;
 		}
+	}
+	
+	@Override
+	public Usuario findUsuario(String mail) {
+		System.out.println("el mail por el que busco es:" +mail);
+		Usuario usu = manager.find(Usuario.class, mail);
+		return usu;
 	}
 	
 //	@Override
@@ -77,7 +85,13 @@ public class Memory implements MemoryRemote, MemoryLocal {
 			return false;
 		} else {
 			//registro al usuario
-			manager.persist(usuFinal);		
+			usu = usuFinal;
+			//manager.persist(usu);	
+			manager = emf.createEntityManager();
+			manager.getTransaction().begin();
+			usu = manager.merge(usu);
+			manager.getTransaction().commit();	
+			System.out.println("usuario registrado");
 			return true;
 		}
 	}

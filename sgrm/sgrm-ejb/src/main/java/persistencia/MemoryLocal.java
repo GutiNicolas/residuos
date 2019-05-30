@@ -13,4 +13,5 @@ public interface MemoryLocal {
 	public abstract boolean registrarUsuarioFinal(Final usuFinal);
 	public abstract boolean altaGestor(String nombre, String apellido, String nickAdmin);
 	public abstract boolean altaZonaGestor(long idZona, ZonaEstado zEstado, String mail);
+	public abstract Usuario findUsuario(String mail);
 }

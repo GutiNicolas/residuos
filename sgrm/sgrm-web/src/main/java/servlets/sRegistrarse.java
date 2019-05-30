@@ -36,11 +36,11 @@ public class sRegistrarse extends HttpServlet {
 		RequestDispatcher rl;
 		if (resultado==true) {
 			//Registro el nuevo usuario
+			request.getSession().setAttribute("usulogueado", mail);
+			request.getSession().setAttribute("rol", "final");
 			request.setAttribute("codigo", "1");
-			int codigo = (int) request.getAttribute("codigo");
-			System.out.println("El codigo es:"+codigo);
 			request.setAttribute("mensaje", nombre + ", bienvenido!");
-			rl = request.getRequestDispatcher("/inicio.html");
+			rl = request.getRequestDispatcher("/inicio.jsp");
 		} else {
 			//Usuario ya en uso
 			request.setAttribute("codigo", "0");

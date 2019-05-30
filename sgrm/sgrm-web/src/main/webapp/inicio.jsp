@@ -1,6 +1,8 @@
-<!doctype html>
-<html lang="en">
-  <head>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html>
+<html>
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,12 +13,11 @@
     <title>Inicio!</title>
   </head>
   <body>
-  	<% String nombre = request.getSession().getAttribute("usulogueado");
-  		String rol = request.getSession().getAttribute("rol");
-  	
+  	<% String nombre = request.getSession().getAttribute("usulogueado").toString();
+  		String rol = request.getSession().getAttribute("rol").toString();
   	 %>
-    <h1>Bienvenido usuario !  </h1>
-    <h2>Usted tiene rol </h2>
+    <h1>Bienvenido usuario ! <%=nombre %> </h1>
+    <h2>Usted tiene rol <%=rol %></h2>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

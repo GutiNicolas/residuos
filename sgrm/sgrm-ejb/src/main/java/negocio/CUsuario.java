@@ -24,13 +24,17 @@ public class CUsuario implements CUsuarioRemote, CUsuarioLocal {
 		/*
 			0 no existe el usuario
 			1 existe usuario con esa contraseña
+				10 es usuario administrador
+				11 es usuario final
 			2 existe el usuario pero la contraseña es incorrecta
 		 */
     	System.out.println("consulto a la base con el mail "+mail);
-		Usuario usu = mem.encontrarUsuario(mail);
+		Usuario usu = mem.findUsuario(mail);
 		if (usu!=null) {
 			if (usu.getPassword().equals(pass)) {
-				return 1;
+				if (usu instanceof Final) {
+					return 11;
+				} else return 10;
 			} else {
 				return 2;
 			}
