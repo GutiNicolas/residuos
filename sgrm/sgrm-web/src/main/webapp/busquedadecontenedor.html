@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Insertar contenedor</title>
+	<title>Busqueda de Contenedores</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -27,25 +27,27 @@
 				<div class="text-center">
 					<div class="margen-arriba">
 						<div class="formulario-atras">
-						<div class="text-center"><h4 style="color: #0B0500">Formulario para crear un contenedor</h4></div>
+						<div class="text-center"><h4 style="color: #0B0500">Busqueda de contenedor</h4></div>
 							<form class="text-left" style="height: 500px"> 
 							
 							
-  <div class="form-group text-left">
-    <label for="exampleInputEmail1">Direccion</label> <small id="emailHelp" class="form-text text-muted">Opcional.</small>
-    <input type="email" class="form-control" id="direcont" aria-describedby="emailHelp" placeholder="Ingresar direccion">
-  </div>
-  <label for="exampleFormControlSelect1">Tipo de almacenamiento</label>
+  <label for="exampleFormControlSelect1">Buscar por Tipo de Almacenamiento</label>
     <select class="form-control" id="tipocont">
       <option value="None">Ninguno</option>
       <option value="1">Pilas</option>
       <option value="2">Papel</option>
       <option value="0">Plasticos</option>
       <option value="3">Organico</option>
-      <option value="4">Vidrio</option>
-      
-    </select>
-	<br><br><br><div id="codigoqr"></div>
+      <option value="4">Vidrio</option>    
+    </select> <input id="clickMe" type="button" value="Buscar" onclick="buscarTipo();" />
+      <br><br><label for="exampleFormControlSelect1">Buscar por Estado del Contenedor</label>
+    <select class="form-control" id="estadocont">
+      <option value="None">Ninguno</option>
+      <option value="0">Lleno</option>
+      <option value="1">Roto</option>
+      <option value="2">Disponible</option>
+    </select> <input id="clickMe2" type="button" value="Buscar" onclick="buscarEstado();" />
+	<br><label for="exampleFormControlSelect1">Doble-Click para buscar por Geolocalizacion</label><br><br><br><div id="codigoqr"></div>
  
   
 							</form> 
@@ -55,16 +57,7 @@
 			</div>
 			<div class="col-lg-8 colornegro">
 				<div id="map" class="map"></div>
-<button id="btnPoint" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-  <i class="material-icons">add_location</i>
-</button>
-<button id="btnEdit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-  <i class="material-icons">build</i>
-</button>
-<button id="btnDelete" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-  <i class="material-icons">delete</i>
-</button>
-<button id="btnInfo" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+<button id="btnCho" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
   <i class="material-icons">info</i>
 </button>
 <div id="infoCont"></div>
@@ -217,6 +210,57 @@
         features: selectedFeat
     });
     map.addInteraction(modifyFeat);   */
+    var selectTipo = new ol.interaction.Select();
+    map.addInteraction(selectTipo);
+
+    function buscarTipo() {
+    	var tipoSelec = document.getElementById('tipocont');
+        var tipoVal = tipoSelec.value;
+        if (tipoVal !=='None') {
+			selectTipo.getFeatures().clear();
+			var feats = selectTipo.getFeatures();
+
+			var contens = sourceWFS.getFeatures();
+	        for(var j = 0; j < contens.length; j++){
+	            var cn = contens[j];
+	            var cnv = cn.get('tresiduos');
+	            if(cnv == tipoVal) {
+					feats.push(cn);
+		        }
+        	}
+	        
+        }
+    }
+
+    function buscarEstado() {
+    	var estadoSelec = document.getElementById('estadocont');
+        var estadoVal = estadoSelec.value;
+        if (estadoVal !=='None') {
+			selectTipo.getFeatures().clear();
+			var feats = selectTipo.getFeatures();
+
+			var contens = sourceWFS.getFeatures();
+	        for(var j = 0; j < contens.length; j++){
+	            var cn = contens[j];
+	            var cnv = cn.get('cestado');
+	            if(cnv == estadoVal) {
+					feats.push(cn);
+		        }
+        	}
+	        
+        }
+    }
+
+   var displaySnap = function(coordinate) {
+	   	selectTipo.getFeatures().clear();
+		var feats = selectTipo.getFeatures();
+       	var closestFeature = sourceWFS.getClosestFeatureToCoordinate(coordinate);
+       	feats.push(closestFeature);
+     };
+
+   map.on('dblclick', function(evt) {
+       displaySnap(evt.coordinate);
+     });
 
 
     var transactWFS = function (p, f) {
@@ -400,7 +444,7 @@ $('button').click(function () {
             map.addInteraction(interaction);
             break;
 
-        case 'btnInfo':
+        case 'btnCho':
             interaction = new ol.interaction.Select();
             interaction.getFeatures().on('add', function (e) {
             //todo
