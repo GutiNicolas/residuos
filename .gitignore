@@ -23,4 +23,5 @@
 hs_err_pid*
 
 .classpath
+*.classpath
 persistence.xml
