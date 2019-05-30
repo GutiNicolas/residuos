@@ -47,18 +47,11 @@
             <artifactId>sgrm-web</artifactId>
             <type>war</type>
         </dependency>
-        
         <dependency>
             <groupId>tsig</groupId>
             <artifactId>sgrm-ejb</artifactId>
             <type>ejb</type>
         </dependency>
-        
-<!--         <dependency> -->
-<!-- 		    <groupId>org.primefaces</groupId> -->
-<!-- 		    <artifactId>primefaces</artifactId> -->
-<!-- 		    <version>7.0</version> -->
-<!-- 		</dependency> -->
     </dependencies>
 
     <build>
