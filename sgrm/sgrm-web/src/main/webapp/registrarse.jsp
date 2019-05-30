@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Login V1</title>
+<title>Registrarse</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
@@ -134,7 +134,7 @@ body {
 			if (document.getElementById('cod').value == 1){
 				swal("¡Éxito!", messege, "sucess");
 			}		
-			if (document.getElementById('cod').value == 0){
+			if (document.getElementById('cod').value == 67){
 				swal("Oops!", messege, "info");
 			}				
 		}

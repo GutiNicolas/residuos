@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-                
+                        
+    
+    
     
     
     <wb-module deploy-name="sgrm-ear">
-                                
+                                                
+        
+        
         
         
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/ear-resources"/>
-                                
+                                                
+        
+        
         
         
         <wb-resource deploy-path="/" source-path="/src/main/application" tag="defaultRootSource"/>
@@ -80,14 +86,15 @@
         <dependent-module archiveName="jandex.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/org/jboss/jandex/1.1.0.Final/jandex-1.1.0.Final.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="primefaces.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/org/primefaces/primefaces/7.0/primefaces-7.0.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-                            
+                                            
+    
+    
     
     
     </wb-module>
-            
+                    
+
+
 
 
 </project-modules>

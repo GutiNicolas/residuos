@@ -33,17 +33,30 @@ public class login extends HttpServlet {
 
 		System.out.println("estoy en el servlet de login");
 		String mail= request.getParameter("email");
+		System.out.println("mail ingresado: "+mail);
+		
 		String pass = request.getParameter("pass");
 		int exito = cur.login(mail, pass);
 		System.out.println("exito:"+exito);
 		RequestDispatcher rl;
-		if (exito == 1) {
-			rl = request.getRequestDispatcher("/inicio.html");
+		if (exito == 11) {
+			request.getSession().setAttribute("usulogueado", mail);
+			request.getSession().setAttribute("rol", "final");
+			rl = request.getRequestDispatcher("/inicio.jsp");
+			rl.forward(request, response);
+			
+		} 
+		if (exito == 10) {
+			rl = request.getRequestDispatcher("/inicio.jsp");
+			request.getSession().setAttribute("usulogueado", mail);
+			request.getSession().setAttribute("rol", "admin");
+			rl = request.getRequestDispatcher("/inicio.jsp");
+//			rl = request.getRequestDispatcher("/registrarcontenedor.html");
 			rl.forward(request, response);
 			
 		} 
 		if (exito == 0) {
-			request.setAttribute("codigo", "0");
+			request.setAttribute("codigo", "67");
 			request.setAttribute("mensaje", mail + ", no está registrado!");
 			rl = request.getRequestDispatcher("/registrarse.jsp");
 			rl.forward(request, response);
@@ -51,7 +64,7 @@ public class login extends HttpServlet {
 		if (exito == 2) {
 			request.setAttribute("codigo", "2");
 			request.setAttribute("mensaje","Contraseña incorrecta!");
-			rl = request.getRequestDispatcher("/registrarse.jsp");
+			rl = request.getRequestDispatcher("/login.jsp");
 			rl.forward(request, response);
 		}
 	}

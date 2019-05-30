@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Login V1</title>
+	<title>Login</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -65,7 +65,7 @@
 						</button>
 					</div>
 					<div class="text-center p-t-30">
-						<a class="txt2" href="registrarse.html">
+						<a class="txt2" href="registrarse.jsp">
 							Registrarse
 							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
 						</a>
@@ -102,9 +102,12 @@
 		function validarRegistro(){	
 			var messege = document.getElementById('msg').value
 	
-			if (document.getElementById('cod').value == 0){
+			if (document.getElementById('cod').value == 67){
 				swal("Oops!", messege, "info");
-			}				
+			}		
+			if (document.getElementById('cod').value == 2){
+				swal("Oops!", messege, "info");
+			}		
 		}
 	</script>
 	<script >
