@@ -14,6 +14,7 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 import negocio.Administrador;
+import negocio.Camion;
 import negocio.Final;
 import negocio.Gestor;
 import negocio.Usuario;
@@ -127,5 +128,27 @@ public class Memory implements MemoryRemote, MemoryLocal {
 		}
 		return res;
 	}
+	
+	@Override
+	public void altaCamion(Camion camion) {
+		// TODO Auto-generated method stub
+		
+		manager.persist(camion);
+	}
+	@Override
+	public Zona buscarZona(long idZona){
+		Zona zona = manager.find(Zona.class, idZona);
+		return zona;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Zona> getAllZonas() {
+		System.out.println("obteniendo las zonas de la base");
+		List<Zona> zonas = (List<Zona>) manager.createQuery("FROM Zona").getResultList();
+		System.out.println("obtube las zonas y el tamaño del array es "+ zonas.size());
+		return zonas;
+	}
+
 
 }
