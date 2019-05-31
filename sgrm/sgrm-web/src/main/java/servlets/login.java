@@ -42,7 +42,7 @@ public class login extends HttpServlet {
 		if (exito == 11) {
 			request.getSession().setAttribute("usulogueado", mail);
 			request.getSession().setAttribute("rol", "final");
-			rl = request.getRequestDispatcher("/inicio.jsp");
+			rl = request.getRequestDispatcher("/index.jsp");
 			rl.forward(request, response);
 			
 		} 
@@ -50,7 +50,7 @@ public class login extends HttpServlet {
 			rl = request.getRequestDispatcher("/inicio.jsp");
 			request.getSession().setAttribute("usulogueado", mail);
 			request.getSession().setAttribute("rol", "admin");
-			rl = request.getRequestDispatcher("/inicio.jsp");
+			rl = request.getRequestDispatcher("/index.jsp");
 //			rl = request.getRequestDispatcher("/registrarcontenedor.html");
 			rl.forward(request, response);
 			

@@ -40,7 +40,7 @@ public class sRegistrarse extends HttpServlet {
 			request.getSession().setAttribute("rol", "final");
 			request.setAttribute("codigo", "1");
 			request.setAttribute("mensaje", nombre + ", bienvenido!");
-			rl = request.getRequestDispatcher("/inicio.jsp");
+			rl = request.getRequestDispatcher("/index.jsp");
 		} else {
 			//Usuario ya en uso
 			request.setAttribute("codigo", "0");

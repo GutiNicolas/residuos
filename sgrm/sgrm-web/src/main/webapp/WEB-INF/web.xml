@@ -48,4 +48,14 @@
     <servlet-name>sRegistrarse</servlet-name>
     <url-pattern>/sRegistrarse</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>sLogout</display-name>
+    <servlet-name>sLogout</servlet-name>
+    <servlet-class>servlets.sLogout</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>sLogout</servlet-name>
+    <url-pattern>/sLogout</url-pattern>
+  </servlet-mapping>
 </web-app>
