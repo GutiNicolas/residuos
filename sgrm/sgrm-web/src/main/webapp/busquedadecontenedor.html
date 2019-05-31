@@ -25,10 +25,10 @@
 		<div class="row">
 			<div class="col-lg-4 coloramarillo">
 				<div class="text-center">
-					<div class="margen-arriba">
-						<div class="formulario-atras">
+					<div class="margen-arrib">
+						<div class="formulario-atra">
 						<div class="text-center"><h4 style="color: #0B0500">Busqueda de contenedor</h4></div>
-							<form class="text-left" style="height: 500px"> 
+							<form class="text-left" > 
 							
 							
   <label for="exampleFormControlSelect1">Buscar por Tipo de Almacenamiento</label>
@@ -39,17 +39,21 @@
       <option value="0">Plasticos</option>
       <option value="3">Organico</option>
       <option value="4">Vidrio</option>    
-    </select> <input id="clickMe" type="button" value="Buscar" onclick="buscarTipo();" />
+    </select> <input id="clickMe" class="btn btn-primary" type="button" value="Buscar" onclick="buscarTipo();" />
       <br><br><label for="exampleFormControlSelect1">Buscar por Estado del Contenedor</label>
     <select class="form-control" id="estadocont">
       <option value="None">Ninguno</option>
       <option value="0">Lleno</option>
       <option value="1">Roto</option>
       <option value="2">Disponible</option>
-    </select> <input id="clickMe2" type="button" value="Buscar" onclick="buscarEstado();" />
-	<br><label for="exampleFormControlSelect1">Doble-Click para buscar por Geolocalizacion</label><br><br><br><div id="codigoqr"></div>
+    </select> <input id="clickMe2" type="button" value="Buscar" class="btn btn-primary" onclick="buscarEstado();" />
+	<br><br><label for="exampleFormControlSelect1">Doble-Click para buscar por Geolocalizacion</label><br>
+ 	<br><label for="exampleFormControlSelect1">Buscar por Calles</label><br>
+
+    <input type="text" class="form-control" id="calleuno" aria-describedby="emailHelp" placeholder="Calle 1">
  
-  
+    <input type="text" class="form-control" id="calledos" aria-describedby="emailHelp" placeholder="Calle 2">  
+	    <input id="clickMe3" type="button" value="Buscar" class="btn btn-primary" onclick="buscarCalle();" />	
 							</form> 
 						</div>
 					</div>
@@ -107,6 +111,33 @@
         	source: sourceWFS
     	});
 
+	    var sourceCWFS = new ol.source.Vector({
+		    loader: function (extent, resolution, projection) {
+		        var url = "http://localhost:8081/geoserver/wfs?service=WFS"
+		                + "&version=2.0.0&request=GetFeature"
+		                + '&outputFormat=text/javascript'
+		                + "&typename=cite:v_mdg_vias"
+		                + "&format_options=callback:loadFeaturesC"
+		                + '&srsname=EPSG:32721';
+		        // use jsonp: false to prevent jQuery from adding the "callback"
+		        $.ajax({url: url, dataType: 'jsonp', jsonp: false});
+		    }
+		});
+
+		/**
+		 * JSONP WFS callback function.
+		 * @param {Object} response The response object.
+		 */
+		window.loadFeaturesC = function (response) {
+			 sourceCWFS.addFeatures(new ol.format.GeoJSON().readFeatures(response));
+		};	
+	
+	    var layerCWFS = new ol.layer.Vector({
+            visible: true,
+        	source: sourceCWFS,
+        	opacity: 0.0
+    	});
+
     var layers = [
         new ol.layer.Tile({
             source: new ol.source.OSM(),
@@ -145,6 +176,7 @@
              	format: new ol.format.GeoJSON()
          	})
      	}),
+     	layerCWFS,
     	layerWFS    
     ];
 
@@ -249,6 +281,50 @@
         	}
 	        
         }
+    }
+
+    function buscarCalle() {
+    	var calleuno = document.getElementById('calleuno');
+        var calleunoVal = calleuno.value.toUpperCase();
+        var calledos = document.getElementById('calledos');
+        var calledosVal = calledos.value.toUpperCase();
+
+        var callea=[];
+        var calleb=[];
+
+        var calles = sourceCWFS.getFeatures();
+        for(var j = 0; j < calles.length; j++){
+            var cn = calles[j];
+            var cnv = cn.get('nom_calle');        
+            if(cnv == calleunoVal) {
+				callea.push(cn);			
+	        }
+    	}   	
+
+        for(var i = 0; i < calles.length; i++){
+            var cn = calles[i];
+            var cnv = cn.get('nom_calle');
+            if(cnv == calledosVal) {
+            	calleb.push(cn);			
+	        }
+    	}
+
+        var format = new ol.format.GeoJSON();
+        
+		for(var a = 0; a < callea.length; a++) {
+			var lineaturf = format.writeFeatureObject(callea[a], {'featureProjection': 'EPSG:4326'});
+			for(var b = 0; b < calleb.length; b++) {
+				var lineaturfdos = format.writeFeatureObject(calleb[b], {'featureProjection': 'EPSG:4326'});
+				var ints = turf.lineIntersect(lineaturf,lineaturfdos);
+				if(ints.features.length/* ints != null */){
+					selectTipo.getFeatures().clear();
+					var feats = selectTipo.getFeatures();
+			       	var closestFeature = sourceWFS.getClosestFeatureToCoordinate(ints.features[0].geometry.coordinates);
+			       	feats.push(closestFeature);				
+				}
+			}
+		}
+
     }
 
    var displaySnap = function(coordinate) {
