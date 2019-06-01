@@ -80,21 +80,29 @@
 										value="Buscar" onclick="buscarEstado();" />
 								</div>
 							</div>
-							<div class="form-row align-items-center px-3">
-								<label for="exampleFormControlSelect1">Doble-Click para
-									buscar por Geolocalizacion</label>
-							</div>
 
+							<div class="form-row px-3">
+							<label for="exampleFormControlSelect1">Buscar por interseccion de calles</label>
+								<div class="col-12 col-md-8 mb-3">
+									<input type="text" class="form-control" id="calleuno" aria-describedby="emailHelp" placeholder="Calle 1">
+ 							 		<input type="text" class="form-control" id="calledos" aria-describedby="emailHelp" placeholder="Calle 2">  
+								</div>
+								<div class="col-12 col-md-4 mb-3">
+									 <input id="clickMe3" type="button" value="Buscar" class="btn btn-dark" onclick="buscarCalle();" />
+								</div>
+							</div>
+							
 							<div class="form-row align-items-center px-3">
-								<div id="codigoqr"></div>
+								<br><label for="exampleFormControlSelect1">Doble-Click para
+									buscar por Geolocalizacion</label>
 							</div>
 						</form>
 						<!-- 						</div> -->
 					</div>
 				</div>
 			</div>
-			<div class="col-12 col-md-8 pt-md-10 my-md-20 colornegro">
-				<div id="map" class="map"></div>
+			<div class="col-12 col-md-8 pt-md-10 my-md-20 colornegro" style="height: 100%;">
+				<div id="map" class="map" style="width: 100%; height: 100%; min-height: 270px; position:fixed"></div>
 				<button id="btnCho"
 					class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
 					<i class="material-icons">info</i>
@@ -146,6 +154,33 @@
         	source: sourceWFS
     	});
 
+	    var sourceCWFS = new ol.source.Vector({
+		    loader: function (extent, resolution, projection) {
+		        var url = "http://localhost:8081/geoserver/wfs?service=WFS"
+		                + "&version=2.0.0&request=GetFeature"
+		                + '&outputFormat=text/javascript'
+		                + "&typename=cite:v_mdg_vias"
+		                + "&format_options=callback:loadFeaturesC"
+		                + '&srsname=EPSG:32721';
+		        // use jsonp: false to prevent jQuery from adding the "callback"
+		        $.ajax({url: url, dataType: 'jsonp', jsonp: false});
+		    }
+		});
+
+		/**
+		 * JSONP WFS callback function.
+		 * @param {Object} response The response object.
+		 */
+		window.loadFeaturesC = function (response) {
+			 sourceCWFS.addFeatures(new ol.format.GeoJSON().readFeatures(response));
+		};	
+	
+	    var layerCWFS = new ol.layer.Vector({
+            visible: true,
+        	source: sourceCWFS,
+        	opacity: 0.0
+    	});
+
     var layers = [
         new ol.layer.Tile({
             source: new ol.source.OSM(),
@@ -184,6 +219,7 @@
              	format: new ol.format.GeoJSON()
          	})
      	}),
+     	layerCWFS,
     	layerWFS    
     ];
 
@@ -288,6 +324,50 @@
         	}
 	        
         }
+    }
+
+    function buscarCalle() {
+    	var calleuno = document.getElementById('calleuno');
+        var calleunoVal = calleuno.value.toUpperCase();
+        var calledos = document.getElementById('calledos');
+        var calledosVal = calledos.value.toUpperCase();
+
+        var callea=[];
+        var calleb=[];
+
+        var calles = sourceCWFS.getFeatures();
+        for(var j = 0; j < calles.length; j++){
+            var cn = calles[j];
+            var cnv = cn.get('nom_calle');        
+            if(cnv == calleunoVal) {
+				callea.push(cn);			
+	        }
+    	}   	
+
+        for(var i = 0; i < calles.length; i++){
+            var cn = calles[i];
+            var cnv = cn.get('nom_calle');
+            if(cnv == calledosVal) {
+            	calleb.push(cn);			
+	        }
+    	}
+
+        var format = new ol.format.GeoJSON();
+        
+		for(var a = 0; a < callea.length; a++) {
+			var lineaturf = format.writeFeatureObject(callea[a], {'featureProjection': 'EPSG:4326'});
+			for(var b = 0; b < calleb.length; b++) {
+				var lineaturfdos = format.writeFeatureObject(calleb[b], {'featureProjection': 'EPSG:4326'});
+				var ints = turf.lineIntersect(lineaturf,lineaturfdos);
+				if(ints.features.length/* ints != null */){
+					selectTipo.getFeatures().clear();
+					var feats = selectTipo.getFeatures();
+			       	var closestFeature = sourceWFS.getClosestFeatureToCoordinate(ints.features[0].geometry.coordinates);
+			       	feats.push(closestFeature);				
+				}
+			}
+		}
+
     }
 
    var displaySnap = function(coordinate) {
