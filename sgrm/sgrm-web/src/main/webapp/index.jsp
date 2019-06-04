@@ -92,6 +92,16 @@
 								</div>
 							</div>
 							
+							<div class="form-row px-3">
+							
+								<div class="col-12 col-md-8 mb-3">
+									<label for="exampleFormControlSelect1">Buscar por localizacion actual</label>				 
+								</div>
+								<div class="col-12 col-md-4 mb-3">
+									 <input id="clickMe3" type="button" value="Buscar" class="btn btn-dark" onclick="buscarGPS();" />
+								</div>
+							</div>
+							
 							<div class="form-row align-items-center px-3">
 								<br><label for="exampleFormControlSelect1">Doble-Click para
 									buscar por Geolocalizacion</label>
@@ -227,9 +237,9 @@
 
     var interaction;
 
-    var interactionSelectPointerMove = new ol.interaction.Select({
+   /* var interactionSelectPointerMove = new ol.interaction.Select({
         condition: ol.events.condition.pointerMove
-    });
+    });  */
 
     var interactionSelect = new ol.interaction.Select({
         style: new ol.style.Style({
@@ -247,7 +257,7 @@
         layers: layers,
         controls: [],
         interactions: [
-        	interactionSelectPointerMove,
+ //       	interactionSelectPointerMove,   //SI SE DESCOMENTA DESCOMENTAR LA DECLARACION QUE ESTA MAS ARRIBA, CONSUME MUCHO
             new ol.interaction.MouseWheelZoom(),
             new ol.interaction.DragPan()
         ],
@@ -325,6 +335,23 @@
 	        
         }
     }
+
+    function buscarGPS() {
+
+    	navigator.geolocation.getCurrentPosition(showPosition);    	
+    	
+    }
+
+    function showPosition(position) {
+    	  var latlon = position.coords.latitude + "," + position.coords.longitude;
+			alert(latlon);
+			var nuevap = proj4("+proj=utm +zone=21 +south +datum=WGS84 +units=m +no_defs", [position.coords.longitude,position.coords.latitude]);
+			alert(nuevap);
+    	  	selectTipo.getFeatures().clear();
+  			var feats = selectTipo.getFeatures();
+         	var closestFeature = sourceWFS.getClosestFeatureToCoordinate(nuevap);
+         	feats.push(closestFeature);	
+    	}
 
     function buscarCalle() {
     	var calleuno = document.getElementById('calleuno');
@@ -588,7 +615,10 @@ $('button').click(function () {
                 	
             	}
                 var info = document.getElementById('infoCont');
+                info.innerHTML = '';
+                if (e.target.item(0).getId().includes("cont")){
                 info.innerHTML = e.target.item(0).getId() + '  TIPO: ' + tipore + '  ID Zona: ' + e.target.item(0).get('zona_idzona');
+                }
             });
             map.addInteraction(interaction);
             break;
