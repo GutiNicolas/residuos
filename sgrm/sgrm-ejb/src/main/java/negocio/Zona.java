@@ -11,12 +11,14 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import datatypes.DtZona;
 
 @Entity
+@NamedQuery(name="Zona.findAll", query="SELECT z FROM Zona z")
 public class Zona implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

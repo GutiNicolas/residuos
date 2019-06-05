@@ -1,72 +1,125 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Busqueda de Contenedores</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="stylesheet" href="/geoserver/style.css" type="text/css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" type="text/css" href="https://code.getmdl.io/1.1.3/material.indigo-orange.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.5.0/proj4.js"></script>
-    <script src="https://epsg.io/32721.js"></script>
- 	<script src="http://svn.osgeo.org/metacrs/proj4js/trunk/lib/proj4js-compressed.js"></script>
-  	<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
-  	<link  rel="stylesheet" src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css"></link>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-   	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"><meta content="width=device-width, initial-scale=1" name="viewport" />
-	<link rel="stylesheet" href="home.css">
-	<script src="qrcode.js"></script>
-	<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+<meta charset="UTF-8">
+<title>Busqueda de Contenedores</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" type="image/png" href="resources/assets/images/icons/favicon.ico"/>
+<link rel="stylesheet" href="/geoserver/style.css" type="text/css" />
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.pink-light_blue.min.css" />
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.5.0/proj4.js"></script>
+<script src="https://epsg.io/32721.js"></script>
+<script
+	src="http://svn.osgeo.org/metacrs/proj4js/trunk/lib/proj4js-compressed.js"></script>
+<script
+	src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+<link rel="stylesheet"
+	src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css"></link>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<link rel="stylesheet" href="home.css">
+<script src="qrcode.js"></script>
+<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
 </head>
 <body>
+	<jsp:include page="header.jsp" />
 	<div id="container">
-		<div class="row">
-			<div class="col-lg-4 coloramarillo">
+		<div class="row pt-10">
+			<div class="col-12 col-md-4">
 				<div class="text-center">
-					<div class="margen-arrib">
-						<div class="formulario-atra">
-						<div class="text-center"><h4 style="color: #0B0500">Busqueda de contenedor</h4></div>
-							<form class="text-left" > 
-							
-							
-  <label for="exampleFormControlSelect1">Buscar por Tipo de Almacenamiento</label>
-    <select class="form-control" id="tipocont">
-      <option value="None">Ninguno</option>
-      <option value="1">Pilas</option>
-      <option value="2">Papel</option>
-      <option value="0">Plasticos</option>
-      <option value="3">Organico</option>
-      <option value="4">Vidrio</option>    
-    </select> <input id="clickMe" class="btn btn-primary" type="button" value="Buscar" onclick="buscarTipo();" />
-      <br><br><label for="exampleFormControlSelect1">Buscar por Estado del Contenedor</label>
-    <select class="form-control" id="estadocont">
-      <option value="None">Ninguno</option>
-      <option value="0">Lleno</option>
-      <option value="1">Roto</option>
-      <option value="2">Disponible</option>
-    </select> <input id="clickMe2" type="button" value="Buscar" class="btn btn-primary" onclick="buscarEstado();" />
-	<br><br><label for="exampleFormControlSelect1">Doble-Click para buscar por Geolocalizacion</label><br>
- 	<br><label for="exampleFormControlSelect1">Buscar por Calles</label><br>
-
-    <input type="text" class="form-control" id="calleuno" aria-describedby="emailHelp" placeholder="Calle 1">
- 
-    <input type="text" class="form-control" id="calledos" aria-describedby="emailHelp" placeholder="Calle 2">  
-	    <input id="clickMe3" type="button" value="Buscar" class="btn btn-primary" onclick="buscarCalle();" />	
-							</form> 
+					<div class="margen-arriba">
+						<!-- 						<div class="formulario-atras"> -->
+						<div class="text-center">
+							<h4 style="color: #0B0500">Busqueda de contenedor</h4>
 						</div>
+						<!-- 							<form class="text-left" style="height: 500px"> -->
+						<form class="formulario-bk m-lg-2 m-sm-5">
+							<div class="form-row align-items-center px-3">
+								<label for="exampleFormControlSelect1">Tipo de Almacenamiento</label>
+								<div class="col-12 col-md-8 mb-3">
+									<select class="form-control" id="tipocont">
+										<option value="None">Ninguno</option>
+										<option value="1">Pilas</option>
+										<option value="2">Papel</option>
+										<option value="0">Plasticos</option>
+										<option value="3">Organico</option>
+										<option value="4">Vidrio</option>
+									</select>
+								</div>
+								<div class="col-12 col-md-4 mb-3">
+									<input id="clickMe" type="button" class="btn btn-dark"
+										value="Buscar" onclick="buscarTipo();" />
+								</div>
+							</div>
+							
+							<div class="form-row px-3">
+								<label for="exampleFormControlSelect1">Estado del contenedor</label>
+								<div class="col-12 col-md-8 mb-3">
+									<select class="form-control" id="estadocont">
+										<option value="None">Ninguno</option>
+										<option value="0">Lleno</option>
+										<option value="1">Roto</option>
+										<option value="2">Disponible</option>
+									</select>
+								</div>
+								<div class="col-12 col-md-4 mb-3">
+									<input id="clickMe2" type="button" class="btn btn-dark"
+										value="Buscar" onclick="buscarEstado();" />
+								</div>
+							</div>
+
+							<div class="form-row px-3">
+							<label for="exampleFormControlSelect1">Buscar por interseccion de calles</label>
+								<div class="col-12 col-md-8 mb-3">
+									<input type="text" class="form-control" id="calleuno" aria-describedby="emailHelp" placeholder="Calle 1">
+ 							 		<input type="text" class="form-control" id="calledos" aria-describedby="emailHelp" placeholder="Calle 2">  
+								</div>
+								<div class="col-12 col-md-4 mb-3">
+									 <input id="clickMe3" type="button" value="Buscar" class="btn btn-dark" onclick="buscarCalle();" />
+								</div>
+							</div>
+							
+							<div class="form-row px-3">
+							<label for="exampleFormControlSelect1">Buscar por localizacion actual</label>
+								<div class="col-12 col-md-8 mb-3">
+													 
+								</div>
+								<div class="col-12 col-md-4 mb-3">
+									 <input id="clickMe3" type="button" value="Buscar" class="btn btn-dark" onclick="buscarGPS();" />
+								</div>
+							</div>
+							
+							<div class="form-row align-items-center px-3">
+								<br><label for="exampleFormControlSelect1">Doble-Click para
+									buscar por Geolocalizacion</label>
+							</div>
+						</form>
+						<!-- 						</div> -->
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-8 colornegro">
-				<div id="map" class="map"></div>
-<button id="btnCho" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-  <i class="material-icons">info</i>
-</button>
-<div id="infoCont"></div>
+			<div class="col-12 col-md-8 pt-md-10 my-md-20 colornegro" style="height: 100%;">
+				<div id="map" class="map" style="width: 100%; height: 100%; min-height: 270px; position:fixed"></div>
+				<button id="btnCho"
+					class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+					<i class="material-icons">info</i>
+				</button>
+				<div id="infoCont"></div>
 
-	<script type="text/javascript">
+				<script type="text/javascript">
 		   
 	var map;
 	proj4.defs('EPSG:32721','+proj=utm +zone=21 +south +datum=WGS84 +units=m +no_defs');
@@ -184,9 +237,9 @@
 
     var interaction;
 
-    var interactionSelectPointerMove = new ol.interaction.Select({
+   /* var interactionSelectPointerMove = new ol.interaction.Select({
         condition: ol.events.condition.pointerMove
-    });
+    });  */
 
     var interactionSelect = new ol.interaction.Select({
         style: new ol.style.Style({
@@ -204,7 +257,7 @@
         layers: layers,
         controls: [],
         interactions: [
-        	interactionSelectPointerMove,
+ //       	interactionSelectPointerMove,   //SI SE DESCOMENTA DESCOMENTAR LA DECLARACION QUE ESTA MAS ARRIBA, CONSUME MUCHO
             new ol.interaction.MouseWheelZoom(),
             new ol.interaction.DragPan()
         ],
@@ -267,7 +320,24 @@
     function buscarEstado() {
     	var estadoSelec = document.getElementById('estadocont');
         var estadoVal = estadoSelec.value;
-        if (estadoVal !=='None') {
+        var tipoSelec = document.getElementById('tipocont');
+        var tipoVal = tipoSelec.value;
+        if (estadoVal !=='None' && tipoVal !=='None') {
+        	selectTipo.getFeatures().clear();
+			var feats = selectTipo.getFeatures();
+
+			var contens = sourceWFS.getFeatures();
+	        for(var j = 0; j < contens.length; j++){
+	            var cn = contens[j];
+	            var cnv = cn.get('tresiduos');
+	            var cne = cn.get('cestado');
+	            if(cnv == tipoVal && cne == estadoVal) {
+					feats.push(cn);
+		        }
+        	}      	
+
+        }
+        if (estadoVal !=='None' && tipoVal =='None') {
 			selectTipo.getFeatures().clear();
 			var feats = selectTipo.getFeatures();
 
@@ -282,6 +352,23 @@
 	        
         }
     }
+
+    function buscarGPS() {
+
+    	navigator.geolocation.getCurrentPosition(showPosition);    	
+    	
+    }
+
+    function showPosition(position) {
+    	  var latlon = position.coords.latitude + "," + position.coords.longitude;
+			alert(latlon);
+			var nuevap = proj4("+proj=utm +zone=21 +south +datum=WGS84 +units=m +no_defs", [position.coords.longitude,position.coords.latitude]);
+			alert(nuevap);
+    	  	selectTipo.getFeatures().clear();
+  			var feats = selectTipo.getFeatures();
+         	var closestFeature = sourceWFS.getClosestFeatureToCoordinate(nuevap);
+         	feats.push(closestFeature);	
+    	}
 
     function buscarCalle() {
     	var calleuno = document.getElementById('calleuno');
@@ -339,7 +426,6 @@
      });
 
 
-    var transactWFS = function (p, f) {
     var node;
     switch (p) {
         case 'insert':
@@ -364,7 +450,7 @@
     	layerWFS.getSource().clear();
         layerWFS.getSource().refresh();
         });
-}
+
 
 /*selectFeat.getFeatures().on('change:length', function (e) {
     transactWFS('delete', e.target.item(0));
@@ -545,7 +631,10 @@ $('button').click(function () {
                 	
             	}
                 var info = document.getElementById('infoCont');
+                info.innerHTML = '';
+                if (e.target.item(0).getId().includes("cont")){
                 info.innerHTML = e.target.item(0).getId() + '  TIPO: ' + tipore + '  ID Zona: ' + e.target.item(0).get('zona_idzona');
+                }
             });
             map.addInteraction(interaction);
             break;
@@ -561,15 +650,26 @@ $('button').click(function () {
 
 
     </script>
-				
+
 			</div>
 		</div>
 	</div>
-	
-	
-	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+		crossorigin="anonymous"></script>
+		
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
 </body>
 </html>

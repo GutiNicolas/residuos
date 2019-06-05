@@ -1,14 +1,17 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Busqueda de Contenedores</title>
+	<title>Registrar zona</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="resources/assets/images/icons/favicon.ico"/>
     <link rel="stylesheet" href="/geoserver/style.css" type="text/css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" type="text/css" href="https://code.getmdl.io/1.1.3/material.indigo-orange.min.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.pink-light_blue.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.5.0/proj4.js"></script>
     <script src="https://epsg.io/32721.js"></script>
  	<script src="http://svn.osgeo.org/metacrs/proj4js/trunk/lib/proj4js-compressed.js"></script>
@@ -17,51 +20,48 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
    	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"><meta content="width=device-width, initial-scale=1" name="viewport" />
 	<link rel="stylesheet" href="home.css">
-	<script src="qrcode.js"></script>
 	<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
 </head>
 <body>
+	<jsp:include page="header.jsp" />
 	<div id="container">
 		<div class="row">
 			<div class="col-lg-4 coloramarillo">
 				<div class="text-center">
-					<div class="margen-arrib">
-						<div class="formulario-atra">
-						<div class="text-center"><h4 style="color: #0B0500">Busqueda de contenedor</h4></div>
-							<form class="text-left" > 
+					<div class="margen-arriba">
+						<div class="formulario-atras">
+						<div class="text-center"><h4 style="color: #0B0500">Formulario para crear una zona</h4></div>
+							<form class="text-left" style="height: 500px"> 
 							
 							
-  <label for="exampleFormControlSelect1">Buscar por Tipo de Almacenamiento</label>
+
+  <label for="exampleFormControlSelect1">Gestor encargado</label>
     <select class="form-control" id="tipocont">
       <option value="None">Ninguno</option>
-      <option value="1">Pilas</option>
-      <option value="2">Papel</option>
-      <option value="0">Plasticos</option>
-      <option value="3">Organico</option>
-      <option value="4">Vidrio</option>    
-    </select> <input id="clickMe" class="btn btn-primary" type="button" value="Buscar" onclick="buscarTipo();" />
-      <br><br><label for="exampleFormControlSelect1">Buscar por Estado del Contenedor</label>
-    <select class="form-control" id="estadocont">
-      <option value="None">Ninguno</option>
-      <option value="0">Lleno</option>
-      <option value="1">Roto</option>
-      <option value="2">Disponible</option>
-    </select> <input id="clickMe2" type="button" value="Buscar" class="btn btn-primary" onclick="buscarEstado();" />
-	<br><br><label for="exampleFormControlSelect1">Doble-Click para buscar por Geolocalizacion</label><br>
- 	<br><label for="exampleFormControlSelect1">Buscar por Calles</label><br>
-
-    <input type="text" class="form-control" id="calleuno" aria-describedby="emailHelp" placeholder="Calle 1">
+      <option value="49213450">CI: 49213450</option>
+      <option value="59213450">CI: 59213450</option>
+      <option value="29213450">CI: 29213450</option>  
+    </select>
+	<br>
  
-    <input type="text" class="form-control" id="calledos" aria-describedby="emailHelp" placeholder="Calle 2">  
-	    <input id="clickMe3" type="button" value="Buscar" class="btn btn-primary" onclick="buscarCalle();" />	
-							</form> 
+  
+</form>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-lg-8 colornegro">
 				<div id="map" class="map"></div>
-<button id="btnCho" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+<button id="btnArea" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+  <i class="material-icons">signal_cellular_null</i>
+</button>
+<button id="btnEdit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+  <i class="material-icons">build</i>
+</button>
+<button id="btnDelete" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+  <i class="material-icons">delete</i>
+</button>
+<button id="btnInfo" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
   <i class="material-icons">info</i>
 </button>
 <div id="infoCont"></div>
@@ -79,7 +79,7 @@
 
 	    var formatGML = new ol.format.GML3({
 	        featureNS: 'http://www.opengeospatial.net/cite',
-	        featureType: 'contenedor',
+	        featureType: 'zona',
 	        srsName: 'EPSG:32721'
 	    });
 
@@ -90,7 +90,7 @@
 		        var url = "http://localhost:8081/geoserver/wfs?service=WFS"
 		                + "&version=2.0.0&request=GetFeature"
 		                + '&outputFormat=text/javascript'
-		                + "&typename=cite:contenedor"
+		                + "&typename=cite:zona"
 		                + "&format_options=callback:loadFeatures"
 		                + '&srsname=EPSG:32721';
 		        // use jsonp: false to prevent jQuery from adding the "callback"
@@ -109,33 +109,6 @@
 	    var layerWFS = new ol.layer.Vector({
             visible: true,
         	source: sourceWFS
-    	});
-
-	    var sourceCWFS = new ol.source.Vector({
-		    loader: function (extent, resolution, projection) {
-		        var url = "http://localhost:8081/geoserver/wfs?service=WFS"
-		                + "&version=2.0.0&request=GetFeature"
-		                + '&outputFormat=text/javascript'
-		                + "&typename=cite:v_mdg_vias"
-		                + "&format_options=callback:loadFeaturesC"
-		                + '&srsname=EPSG:32721';
-		        // use jsonp: false to prevent jQuery from adding the "callback"
-		        $.ajax({url: url, dataType: 'jsonp', jsonp: false});
-		    }
-		});
-
-		/**
-		 * JSONP WFS callback function.
-		 * @param {Object} response The response object.
-		 */
-		window.loadFeaturesC = function (response) {
-			 sourceCWFS.addFeatures(new ol.format.GeoJSON().readFeatures(response));
-		};	
-	
-	    var layerCWFS = new ol.layer.Vector({
-            visible: true,
-        	source: sourceCWFS,
-        	opacity: 0.0
     	});
 
     var layers = [
@@ -163,20 +136,12 @@
             })
         }),
         new ol.layer.Vector({
-            visible: false,
+            visible: true,
         	source: new ol.source.Vector({
-            	url: 'http://localhost:8080/geoserver/wfs?request=getFeature&typeName=cite:v_ep_residuos_decaux&srs=EPSG:32721&outputFormat=application/json',
+            	url: 'http://localhost:8081/geoserver/wfs?request=getFeature&typeName=cite:contenedor&srs=EPSG:32721&outputFormat=application/json',
             	format: new ol.format.GeoJSON()
         	})
     	}),
-    	new ol.layer.Vector({
-             visible: true,
-         	source: new ol.source.Vector({
-             	url: 'http://localhost:8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:32721&outputFormat=application/json',
-             	format: new ol.format.GeoJSON()
-         	})
-     	}),
-     	layerCWFS,
     	layerWFS    
     ];
 
@@ -242,101 +207,6 @@
         features: selectedFeat
     });
     map.addInteraction(modifyFeat);   */
-    var selectTipo = new ol.interaction.Select();
-    map.addInteraction(selectTipo);
-
-    function buscarTipo() {
-    	var tipoSelec = document.getElementById('tipocont');
-        var tipoVal = tipoSelec.value;
-        if (tipoVal !=='None') {
-			selectTipo.getFeatures().clear();
-			var feats = selectTipo.getFeatures();
-
-			var contens = sourceWFS.getFeatures();
-	        for(var j = 0; j < contens.length; j++){
-	            var cn = contens[j];
-	            var cnv = cn.get('tresiduos');
-	            if(cnv == tipoVal) {
-					feats.push(cn);
-		        }
-        	}
-	        
-        }
-    }
-
-    function buscarEstado() {
-    	var estadoSelec = document.getElementById('estadocont');
-        var estadoVal = estadoSelec.value;
-        if (estadoVal !=='None') {
-			selectTipo.getFeatures().clear();
-			var feats = selectTipo.getFeatures();
-
-			var contens = sourceWFS.getFeatures();
-	        for(var j = 0; j < contens.length; j++){
-	            var cn = contens[j];
-	            var cnv = cn.get('cestado');
-	            if(cnv == estadoVal) {
-					feats.push(cn);
-		        }
-        	}
-	        
-        }
-    }
-
-    function buscarCalle() {
-    	var calleuno = document.getElementById('calleuno');
-        var calleunoVal = calleuno.value.toUpperCase();
-        var calledos = document.getElementById('calledos');
-        var calledosVal = calledos.value.toUpperCase();
-
-        var callea=[];
-        var calleb=[];
-
-        var calles = sourceCWFS.getFeatures();
-        for(var j = 0; j < calles.length; j++){
-            var cn = calles[j];
-            var cnv = cn.get('nom_calle');        
-            if(cnv == calleunoVal) {
-				callea.push(cn);			
-	        }
-    	}   	
-
-        for(var i = 0; i < calles.length; i++){
-            var cn = calles[i];
-            var cnv = cn.get('nom_calle');
-            if(cnv == calledosVal) {
-            	calleb.push(cn);			
-	        }
-    	}
-
-        var format = new ol.format.GeoJSON();
-        
-		for(var a = 0; a < callea.length; a++) {
-			var lineaturf = format.writeFeatureObject(callea[a], {'featureProjection': 'EPSG:4326'});
-			for(var b = 0; b < calleb.length; b++) {
-				var lineaturfdos = format.writeFeatureObject(calleb[b], {'featureProjection': 'EPSG:4326'});
-				var ints = turf.lineIntersect(lineaturf,lineaturfdos);
-				if(ints.features.length/* ints != null */){
-					selectTipo.getFeatures().clear();
-					var feats = selectTipo.getFeatures();
-			       	var closestFeature = sourceWFS.getClosestFeatureToCoordinate(ints.features[0].geometry.coordinates);
-			       	feats.push(closestFeature);				
-				}
-			}
-		}
-
-    }
-
-   var displaySnap = function(coordinate) {
-	   	selectTipo.getFeatures().clear();
-		var feats = selectTipo.getFeatures();
-       	var closestFeature = sourceWFS.getClosestFeatureToCoordinate(coordinate);
-       	feats.push(closestFeature);
-     };
-
-   map.on('dblclick', function(evt) {
-       displaySnap(evt.coordinate);
-     });
 
 
     var transactWFS = function (p, f) {
@@ -371,9 +241,7 @@
 }); */
 
 
-
-
-function pertenece (e, tipoVal) {
+function pertenece (e) {
 	//e.setId(1);
 	var format = new ol.format.GeoJSON();
 	var puntoturf = format.writeFeatureObject(e, {'featureProjection': 'EPSG:4326'});
@@ -381,52 +249,36 @@ function pertenece (e, tipoVal) {
 	fetch('http://localhost:8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:4326&outputFormat=application/json').then(function(response) {
 	        return response.json();
 	      }).then(function(json) {
-	        var areturn= '';
+	        var areturn = '';
 	        zonitas = format.readFeatures(json);
 	     //   var street = features[0];
 	      
 	for (var i = 0; i < zonitas.length; i++){
 			var zon = zonitas[i];
 			var zonaturf = format.writeFeatureObject(zon);
-			if (turf.booleanContains(zonaturf, puntoturf)) {
-				areturn = zon.getId();
-				splited = zon.getId().split(".");
-				e.set('tresiduos', tipoVal);
-				e.set('cestado', 2);
-            	e.set('zona_idzona', splited[1]);
-                transactWFS('insert', e);
-				return;
+			if (!turf.booleanDisjoint(zonaturf, puntoturf)) {
+				areturn = zon.getId(); 
+				
 			}
 	}
-	if (areturn == '') {alert('El contenedor debe estar en una zona');}
+	if (areturn == '') {
+	var tipoSelec = document.getElementById('tipocont');
+	var tipoVal = tipoSelec.value;
+	if (tipoVal !== 'None') {
+		//e.set('idgestor', tipoVal);
+	    transactWFS('insert', e); 
+	} else {
+		transactWFS('insert', e);              	
+	} 
+
+	} else {alert('La zona no puede compartir area geografica con otras zonas');
 	layerWFS.getSource().clear();
     layerWFS.getSource().refresh();
+	}
+
 	});
 }
 
-function generarQR() {
-	var ccc = document.getElementById('codigoqr');
-    ccc.innerHTML = '';
-    var contens = sourceWFS.getFeatures();
-    var max = 0;
-    for(var j = 0; j < contens.length; j++){
-        var cn = contens[j];
-        var cnv = cn.getId().split(".");
-		if(max < cnv[1] ){
-			max = cnv[1];
-		}
-    }
-    max++;
-   // USAR max+1
-    let qrcode = new QRCode("codigoqr", {
-		text: "http://localhost:8080/sgrm-web/reportarContenedor?id="+max,
-		width: 177,
-		height: 177,
-		colorDark: "#37323E",
-		colorLight: "#FBFFF1",
-		correctLevel: QRCode.CorrectLevel.H
-        });
-}
 
 
 $('button').click(function () {
@@ -474,14 +326,11 @@ $('button').click(function () {
                 var tipoSelec = document.getElementById('tipocont');
                 var tipoVal = tipoSelec.value;
                 if (tipoVal !== 'None') {
-                    pertenece(e.feature, tipoVal);
-                    generarQR();                  
+                	e.feature.set('nombre_con', tipoVal);
+                    transactWFS('insert', e.feature); 
                 } else {
-                	alert("Seleccione un tipo para el contenedor");   
-                	          	
-                }
-                layerWFS.getSource().clear();
-                layerWFS.getSource().refresh();                                
+                	alert("Seleccione un tipo para el contenedor");              	
+                }                                
             });
             break;
 
@@ -502,7 +351,8 @@ $('button').click(function () {
                 source: layerWFS.getSource()
             });
             interaction.on('drawend', function (e) {
-                transactWFS('insert', e.feature);
+            	pertenece(e.feature);
+                
             });
             map.addInteraction(interaction);
             break;
@@ -520,32 +370,12 @@ $('button').click(function () {
             map.addInteraction(interaction);
             break;
 
-        case 'btnCho':
+        case 'btnInfo':
             interaction = new ol.interaction.Select();
             interaction.getFeatures().on('add', function (e) {
             //todo
-            	var tipore;
-            	switch (e.target.item(0).get('tresiduos')) {
-            	case 0:
-					tipore= "Plastico";
-                	break;
-            	case 1:
-            		tipore= "Pilas";
-                	break;
-            	case 2:
-            		tipore= "Papel";
-            		break;
-            	case 3:
-            		tipore= "Organico";
-                	break;
-            	case 4:
-            		tipore= "Vidrio";
-                	break;
-                
-                	
-            	}
                 var info = document.getElementById('infoCont');
-                info.innerHTML = e.target.item(0).getId() + '  TIPO: ' + tipore + '  ID Zona: ' + e.target.item(0).get('zona_idzona');
+                info.innerHTML = e.target.item(0).getId();
             });
             map.addInteraction(interaction);
             break;
@@ -554,8 +384,6 @@ $('button').click(function () {
             break;
     }
 });
-
-
 
 
 
