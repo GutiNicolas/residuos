@@ -21,4 +21,6 @@ public interface MemoryLocal {
 	public void altaCamion(Camion camion);
 	public abstract Zona buscarZona(long idZona);
 	public abstract List<Zona> getAllZonas();
+	void editZona(Zona zona);
+	public abstract void editCamion(Camion camion);
 }

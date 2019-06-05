@@ -12,6 +12,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 //import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.Root;
 
 import negocio.Administrador;
 import negocio.Camion;
@@ -31,7 +33,8 @@ import negocio.ZonaEstado;
 public class Memory implements MemoryRemote, MemoryLocal {
 	
 //	@PersistenceContext(unitName= "sgrm-pu")
-//	private EntityManager manager;
+//	private EntityManager mng;
+	
 	EntityManagerFactory emf = Persistence.createEntityManagerFactory("sgrm-pu");
 	EntityManager manager = emf.createEntityManager();
 	private List<Usuario> usuarios;
@@ -88,7 +91,7 @@ public class Memory implements MemoryRemote, MemoryLocal {
 			//registro al usuario
 			usu = usuFinal;
 			//manager.persist(usu);	
-			manager = emf.createEntityManager();
+	//		manager = emf.createEntityManager();
 			manager.getTransaction().begin();
 			usu = manager.merge(usu);
 			manager.getTransaction().commit();	
@@ -132,22 +135,83 @@ public class Memory implements MemoryRemote, MemoryLocal {
 	@Override
 	public void altaCamion(Camion camion) {
 		// TODO Auto-generated method stub
+		manager.getTransaction().begin();
+		
 		
 		manager.persist(camion);
+		
+		manager.getTransaction().commit();	
+		if (manager.find(Camion.class, camion.getIdCamion()) != null) {
+			System.out.println("persistio bien");;
+		}else {
+			System.out.println("no persistio nada");
+		}
 	}
 	@Override
 	public Zona buscarZona(long idZona){
 		Zona zona = manager.find(Zona.class, idZona);
 		return zona;
 	}
-
+	
 	@Override
+	public void editZona(Zona zona) {
+		manager.getTransaction().begin();
+		manager.merge(zona);
+		manager.getTransaction().commit();
+	}
+
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<Zona> getAllZonas() {
 		System.out.println("obteniendo las zonas de la base");
-		List<Zona> zonas = (List<Zona>) manager.createQuery("FROM Zona").getResultList();
+//		long idd = 1;
+//		Zona zz = manager.find(Zona.class, idd);
+		
+//		System.out.println("la zona obtenida es: "+ zz.getIdZona());
+		
+		
+		//String hql = "Select z.idZona, z.zEstado, z.gestor FROM Zona z";
+		String hql = "SELECT z FROM Zona z";
+		
+		
+		//String hql = "FROM Zona";
+		System.out.println("creada el texto de la consulta: " + hql);
+		
+		Query query = manager.createQuery(hql, Zona.class);
+		//Query query = manager.createQuery(hql);
+		System.out.println("creada la query ");
+		
+//		javax.persistence.criteria.CriteriaQuery cq = mng.getCriteriaBuilder().createQuery();
+//        Root<Zona> root = cq.from(Zona.class);
+//        cq.select(root);
+//        List<Zona> zonas =  mng.createQuery(cq).getResultList();
+        
+		
+		List<Zona> zonas = (List<Zona>) query.getResultList();
+		System.out.println("Casteado a zonas");
+		//manager.createQuery("Select z.Id, z.zestado, z.gestor_nombre FROM Zona z", Zona.class).getResultList();
 		System.out.println("obtube las zonas y el tamaño del array es "+ zonas.size());
+		System.out.println("listo las zonas: ");
+		for(Zona z : zonas) {
+			System.out.println("zona: "+ z.getIdZona());
+		}
+		
+		
 		return zonas;
+	}
+
+	@Override
+	public void editCamion(Camion camion) {
+		// TODO Auto-generated method stub
+		manager.getTransaction().begin();
+		manager.merge(camion);
+		manager.getTransaction().commit();
+		if (manager.find(Camion.class, camion.getIdCamion()) != null) {
+			System.out.println("edito bien");;
+		}else {
+			System.out.println("no edito nada");
+		}
+		
 	}
 
 
