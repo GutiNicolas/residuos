@@ -93,9 +93,9 @@
 							</div>
 							
 							<div class="form-row px-3">
-							
+							<label for="exampleFormControlSelect1">Buscar por localizacion actual</label>
 								<div class="col-12 col-md-8 mb-3">
-									<label for="exampleFormControlSelect1">Buscar por localizacion actual</label>				 
+													 
 								</div>
 								<div class="col-12 col-md-4 mb-3">
 									 <input id="clickMe3" type="button" value="Buscar" class="btn btn-dark" onclick="buscarGPS();" />
@@ -320,7 +320,24 @@
     function buscarEstado() {
     	var estadoSelec = document.getElementById('estadocont');
         var estadoVal = estadoSelec.value;
-        if (estadoVal !=='None') {
+        var tipoSelec = document.getElementById('tipocont');
+        var tipoVal = tipoSelec.value;
+        if (estadoVal !=='None' && tipoVal !=='None') {
+        	selectTipo.getFeatures().clear();
+			var feats = selectTipo.getFeatures();
+
+			var contens = sourceWFS.getFeatures();
+	        for(var j = 0; j < contens.length; j++){
+	            var cn = contens[j];
+	            var cnv = cn.get('tresiduos');
+	            var cne = cn.get('cestado');
+	            if(cnv == tipoVal && cne == estadoVal) {
+					feats.push(cn);
+		        }
+        	}      	
+
+        }
+        if (estadoVal !=='None' && tipoVal =='None') {
 			selectTipo.getFeatures().clear();
 			var feats = selectTipo.getFeatures();
 
