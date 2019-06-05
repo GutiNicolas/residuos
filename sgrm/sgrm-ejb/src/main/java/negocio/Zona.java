@@ -8,11 +8,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import datatypes.DtZona;
 
 @Entity
+@NamedQuery(name="Zona.findAll", query="SELECT z FROM Zona z")
 public class Zona implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

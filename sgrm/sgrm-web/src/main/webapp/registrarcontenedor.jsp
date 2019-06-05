@@ -278,6 +278,7 @@ function pertenece (e, tipoVal) {
 				e.set('tresiduos', tipoVal);
 				e.set('cestado', 2);
             	e.set('zona_idzona', splited[1]);
+            	e.set('zona_id', splited[1]);
                 transactWFS('insert', e);
 				return;
 			}

@@ -1,5 +1,6 @@
 package persistencia;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -12,7 +13,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 //import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
-
 import negocio.Administrador;
 import negocio.Camion;
 import negocio.Final;
@@ -149,6 +149,13 @@ public class Memory implements MemoryRemote, MemoryLocal {
 		System.out.println("obtube las zonas y el tamaño del array es "+ zonas.size());
 		return zonas;
 	}
+
+	@Override
+	public ArrayList<Zona> getZonas() {
+		return (ArrayList<Zona>) manager.createNamedQuery("Zona.findAll").getResultList();
+	}
+	
+	
 
 
 }

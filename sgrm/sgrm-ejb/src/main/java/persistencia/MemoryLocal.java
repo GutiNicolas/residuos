@@ -1,5 +1,6 @@
 package persistencia;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -21,4 +22,5 @@ public interface MemoryLocal {
 	public void altaCamion(Camion camion);
 	public abstract Zona buscarZona(long idZona);
 	public abstract List<Zona> getAllZonas();
+	public ArrayList<Zona> getZonas();
 }

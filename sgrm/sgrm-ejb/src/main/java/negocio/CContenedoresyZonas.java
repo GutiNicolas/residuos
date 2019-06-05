@@ -60,5 +60,10 @@ public class CContenedoresyZonas implements CContenedoresyZonasRemote, CContened
     	return "Se agrego el camion " + camion.getIdCamion() +" a la cuadrilla de la zona "+ zona.getIdZona();
     	
     }
+	@Override
+	public ArrayList<Zona> getZonas() {
+		// TODO Auto-generated method stub
+		return mem.getZonas();
+	}
 
 }
