@@ -144,8 +144,9 @@ public class Memory implements MemoryRemote, MemoryLocal {
 		manager.persist(camion);
 		
 		manager.getTransaction().commit();	
-		if (manager.find(Camion.class, camion.getIdCamion()) != null) {
-			System.out.println("persistio bien");;
+		Camion c2 = manager.find(Camion.class, camion.getIdCamion());
+		if (c2 != null) {
+			System.out.println("persistio bien el camion " + c2.getIdCamion());;
 		}else {
 			System.out.println("no persistio nada");
 		}
@@ -210,7 +211,7 @@ public class Memory implements MemoryRemote, MemoryLocal {
 		manager.merge(camion);
 		manager.getTransaction().commit();
 		if (manager.find(Camion.class, camion.getIdCamion()) != null) {
-			System.out.println("edito bien");;
+			System.out.println("edito bien el camion "+ camion.getIdCamion());;
 		}else {
 			System.out.println("no edito nada");
 		}
