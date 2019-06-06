@@ -1,14 +1,17 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Busqueda de Contenedores</title>
+	<title>Insertar contenedor</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="resources/assets/images/icons/favicon.ico"/>
     <link rel="stylesheet" href="/geoserver/style.css" type="text/css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" type="text/css" href="https://code.getmdl.io/1.1.3/material.indigo-orange.min.css">
+ 	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.pink-light_blue.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.5.0/proj4.js"></script>
     <script src="https://epsg.io/32721.js"></script>
  	<script src="http://svn.osgeo.org/metacrs/proj4js/trunk/lib/proj4js-compressed.js"></script>
@@ -21,39 +24,34 @@
 	<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
 </head>
 <body>
+	<jsp:include page="header.jsp" />
 	<div id="container">
 		<div class="row">
 			<div class="col-lg-4 coloramarillo">
 				<div class="text-center">
-					<div class="margen-arrib">
-						<div class="formulario-atra">
-						<div class="text-center"><h4 style="color: #0B0500">Busqueda de contenedor</h4></div>
-							<form class="text-left" > 
+					<div class="margen-arriba">
+						<div class="formulario-atras">
+						<div class="text-center"><h4 style="color: #0B0500">Formulario para crear un contenedor</h4></div>
+							<form class="text-left" style="height: 500px"> 
 							
 							
-  <label for="exampleFormControlSelect1">Buscar por Tipo de Almacenamiento</label>
+  <div class="form-group text-left">
+    <label for="exampleInputEmail1">Direccion</label> <small id="emailHelp" class="form-text text-muted">Opcional.</small>
+    <input type="email" class="form-control" id="direcont" aria-describedby="emailHelp" placeholder="Ingresar direccion">
+  </div>
+  <label for="exampleFormControlSelect1">Tipo de almacenamiento</label>
     <select class="form-control" id="tipocont">
       <option value="None">Ninguno</option>
       <option value="1">Pilas</option>
       <option value="2">Papel</option>
       <option value="0">Plasticos</option>
       <option value="3">Organico</option>
-      <option value="4">Vidrio</option>    
-    </select> <input id="clickMe" class="btn btn-primary" type="button" value="Buscar" onclick="buscarTipo();" />
-      <br><br><label for="exampleFormControlSelect1">Buscar por Estado del Contenedor</label>
-    <select class="form-control" id="estadocont">
-      <option value="None">Ninguno</option>
-      <option value="0">Lleno</option>
-      <option value="1">Roto</option>
-      <option value="2">Disponible</option>
-    </select> <input id="clickMe2" type="button" value="Buscar" class="btn btn-primary" onclick="buscarEstado();" />
-	<br><br><label for="exampleFormControlSelect1">Doble-Click para buscar por Geolocalizacion</label><br>
- 	<br><label for="exampleFormControlSelect1">Buscar por Calles</label><br>
-
-    <input type="text" class="form-control" id="calleuno" aria-describedby="emailHelp" placeholder="Calle 1">
+      <option value="4">Vidrio</option>
+      
+    </select>
+	<br><br><br><div id="codigoqr"></div>
  
-    <input type="text" class="form-control" id="calledos" aria-describedby="emailHelp" placeholder="Calle 2">  
-	    <input id="clickMe3" type="button" value="Buscar" class="btn btn-primary" onclick="buscarCalle();" />	
+  
 							</form> 
 						</div>
 					</div>
@@ -61,7 +59,16 @@
 			</div>
 			<div class="col-lg-8 colornegro">
 				<div id="map" class="map"></div>
-<button id="btnCho" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+<button id="btnPoint" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+  <i class="material-icons">add_location</i>
+</button>
+<button id="btnEdit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+  <i class="material-icons">build</i>
+</button>
+<button id="btnDelete" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+  <i class="material-icons">delete</i>
+</button>
+<button id="btnInfo" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
   <i class="material-icons">info</i>
 </button>
 <div id="infoCont"></div>
@@ -111,33 +118,6 @@
         	source: sourceWFS
     	});
 
-	    var sourceCWFS = new ol.source.Vector({
-		    loader: function (extent, resolution, projection) {
-		        var url = "http://localhost:8081/geoserver/wfs?service=WFS"
-		                + "&version=2.0.0&request=GetFeature"
-		                + '&outputFormat=text/javascript'
-		                + "&typename=cite:v_mdg_vias"
-		                + "&format_options=callback:loadFeaturesC"
-		                + '&srsname=EPSG:32721';
-		        // use jsonp: false to prevent jQuery from adding the "callback"
-		        $.ajax({url: url, dataType: 'jsonp', jsonp: false});
-		    }
-		});
-
-		/**
-		 * JSONP WFS callback function.
-		 * @param {Object} response The response object.
-		 */
-		window.loadFeaturesC = function (response) {
-			 sourceCWFS.addFeatures(new ol.format.GeoJSON().readFeatures(response));
-		};	
-	
-	    var layerCWFS = new ol.layer.Vector({
-            visible: true,
-        	source: sourceCWFS,
-        	opacity: 0.0
-    	});
-
     var layers = [
         new ol.layer.Tile({
             source: new ol.source.OSM(),
@@ -176,7 +156,6 @@
              	format: new ol.format.GeoJSON()
          	})
      	}),
-     	layerCWFS,
     	layerWFS    
     ];
 
@@ -242,101 +221,6 @@
         features: selectedFeat
     });
     map.addInteraction(modifyFeat);   */
-    var selectTipo = new ol.interaction.Select();
-    map.addInteraction(selectTipo);
-
-    function buscarTipo() {
-    	var tipoSelec = document.getElementById('tipocont');
-        var tipoVal = tipoSelec.value;
-        if (tipoVal !=='None') {
-			selectTipo.getFeatures().clear();
-			var feats = selectTipo.getFeatures();
-
-			var contens = sourceWFS.getFeatures();
-	        for(var j = 0; j < contens.length; j++){
-	            var cn = contens[j];
-	            var cnv = cn.get('tresiduos');
-	            if(cnv == tipoVal) {
-					feats.push(cn);
-		        }
-        	}
-	        
-        }
-    }
-
-    function buscarEstado() {
-    	var estadoSelec = document.getElementById('estadocont');
-        var estadoVal = estadoSelec.value;
-        if (estadoVal !=='None') {
-			selectTipo.getFeatures().clear();
-			var feats = selectTipo.getFeatures();
-
-			var contens = sourceWFS.getFeatures();
-	        for(var j = 0; j < contens.length; j++){
-	            var cn = contens[j];
-	            var cnv = cn.get('cestado');
-	            if(cnv == estadoVal) {
-					feats.push(cn);
-		        }
-        	}
-	        
-        }
-    }
-
-    function buscarCalle() {
-    	var calleuno = document.getElementById('calleuno');
-        var calleunoVal = calleuno.value.toUpperCase();
-        var calledos = document.getElementById('calledos');
-        var calledosVal = calledos.value.toUpperCase();
-
-        var callea=[];
-        var calleb=[];
-
-        var calles = sourceCWFS.getFeatures();
-        for(var j = 0; j < calles.length; j++){
-            var cn = calles[j];
-            var cnv = cn.get('nom_calle');        
-            if(cnv == calleunoVal) {
-				callea.push(cn);			
-	        }
-    	}   	
-
-        for(var i = 0; i < calles.length; i++){
-            var cn = calles[i];
-            var cnv = cn.get('nom_calle');
-            if(cnv == calledosVal) {
-            	calleb.push(cn);			
-	        }
-    	}
-
-        var format = new ol.format.GeoJSON();
-        
-		for(var a = 0; a < callea.length; a++) {
-			var lineaturf = format.writeFeatureObject(callea[a], {'featureProjection': 'EPSG:4326'});
-			for(var b = 0; b < calleb.length; b++) {
-				var lineaturfdos = format.writeFeatureObject(calleb[b], {'featureProjection': 'EPSG:4326'});
-				var ints = turf.lineIntersect(lineaturf,lineaturfdos);
-				if(ints.features.length/* ints != null */){
-					selectTipo.getFeatures().clear();
-					var feats = selectTipo.getFeatures();
-			       	var closestFeature = sourceWFS.getClosestFeatureToCoordinate(ints.features[0].geometry.coordinates);
-			       	feats.push(closestFeature);				
-				}
-			}
-		}
-
-    }
-
-   var displaySnap = function(coordinate) {
-	   	selectTipo.getFeatures().clear();
-		var feats = selectTipo.getFeatures();
-       	var closestFeature = sourceWFS.getClosestFeatureToCoordinate(coordinate);
-       	feats.push(closestFeature);
-     };
-
-   map.on('dblclick', function(evt) {
-       displaySnap(evt.coordinate);
-     });
 
 
     var transactWFS = function (p, f) {
@@ -394,6 +278,7 @@ function pertenece (e, tipoVal) {
 				e.set('tresiduos', tipoVal);
 				e.set('cestado', 2);
             	e.set('zona_idzona', splited[1]);
+            	e.set('zona_id', splited[1]);
                 transactWFS('insert', e);
 				return;
 			}
@@ -520,7 +405,7 @@ $('button').click(function () {
             map.addInteraction(interaction);
             break;
 
-        case 'btnCho':
+        case 'btnInfo':
             interaction = new ol.interaction.Select();
             interaction.getFeatures().on('add', function (e) {
             //todo

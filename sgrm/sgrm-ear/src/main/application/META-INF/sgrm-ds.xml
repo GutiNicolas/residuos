@@ -29,6 +29,10 @@
         <security>
             <user-name>postgres</user-name>
             <password>postgres</password>
+
+<!--             <user-name>postgres</user-name> -->
+<!--             <password>postgres</password> -->
+
         </security>
     </datasource>
 </datasources>

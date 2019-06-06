@@ -25,3 +25,6 @@ hs_err_pid*
 ##Agregado por gus
 **.settings/
 **.classpath/
+#persistence
+sgrm/sgrm-ejb/src/main/resources/META-INF/persistence.xml
+

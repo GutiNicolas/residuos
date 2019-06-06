@@ -1,12 +1,15 @@
 package negocio;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import datatypes.DtZona;
 import persistencia.MemoryLocal;
 
 
@@ -19,6 +22,7 @@ import persistencia.MemoryLocal;
 @LocalBean
 public class CContenedoresyZonas implements CContenedoresyZonasRemote, CContenedoresyZonasLocal {
 
+	
 	@EJB
 	MemoryLocal mem;
 	
@@ -56,5 +60,41 @@ public class CContenedoresyZonas implements CContenedoresyZonasRemote, CContened
 		}
 		return res;
 	}
+
+	@Override
+    	public List<DtZona> obtenerZonas(){
+    	List<Zona> zonas = mem.getAllZonas();
+    	List <DtZona> dtzonas= new ArrayList<DtZona>();
+		for (Zona z: zonas) {
+			DtZona dtz = z.obtenerDtZona();
+			dtzonas.add(dtz);
+		}
+		return dtzonas;
+   	}
+
+    	@Override
+    	public String altaCamion(String matricula, long idZona) {
+    	System.out.println("estoy en alta camion");
+		Camion camion = new Camion(matricula);
+		System.out.println("creo la instancia del camion");
+		Zona zona = mem.buscarZona(idZona);
+		System.out.println("obtube la zona "+ zona.getIdZona());
+		
+		System.out.println("agregue el camion a la cuadrilla y llamo a la persistencia");
+		mem.altaCamion(camion);
+		//zona.agregarACuadrilla(camion);
+		camion.setZona(zona);
+		
+//		mem.editZona(zona);
+		mem.editCamion(camion);
+		System.out.println("agregado a la base");
+    	return "Se agrego el camion " + camion.getIdCamion() +" a la cuadrilla de la zona "+ zona.getIdZona();
+    	
+    	}
+//	@Override
+//	public ArrayList<Zona> getZonas() {
+//		// TODO Auto-generated method stub
+//		return mem.getZonas();
+//	}
 
 }

@@ -5,7 +5,7 @@
     <param-value>true</param-value>
   </context-param>
   <welcome-file-list>
-    <welcome-file>login.jsp</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
@@ -48,4 +48,15 @@
     <servlet-name>sRegistrarse</servlet-name>
     <url-pattern>/sRegistrarse</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>sLogout</display-name>
+    <servlet-name>sLogout</servlet-name>
+    <servlet-class>servlets.sLogout</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>sLogout</servlet-name>
+    <url-pattern>/sLogout</url-pattern>
+  </servlet-mapping>
+
 </web-app>
