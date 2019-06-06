@@ -57,8 +57,8 @@ public class CUsuario implements CUsuarioRemote, CUsuarioLocal {
 	}
 	
 	@Override
-    public boolean altaGestor(String nombre, String apellido, String nickAdmin) {
-    	return mem.altaGestor(nombre, apellido, nickAdmin);
+    public boolean altaGestor(String ci, String nombre, String apellido, String nickAdmin) {
+    	return mem.altaGestor(ci, nombre, apellido, nickAdmin);
     }
     
     @Override

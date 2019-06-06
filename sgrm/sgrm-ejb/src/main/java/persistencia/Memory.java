@@ -106,11 +106,14 @@ public class Memory implements MemoryRemote, MemoryLocal {
 	}
 
 	@Override
-	public boolean altaGestor(String nombre, String apellido, String nickAdmin) {
+	public boolean altaGestor(String ci, String nombre, String apellido, String nickAdmin) {
 		boolean res = false;
+		manager = emf.createEntityManager();
 		Administrador admin = manager.find(Administrador.class, nickAdmin);
-		Gestor usu = new Gestor(nombre, apellido, admin);
+		manager.getTransaction().begin();
+		Gestor usu = new Gestor(ci, nombre, apellido, admin);
 		manager.persist(usu);
+		manager.getTransaction().commit();	
 		if (manager.find(Gestor.class, nombre) != null) {
 			res = true;
 		}

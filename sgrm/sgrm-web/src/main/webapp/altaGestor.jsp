@@ -1,35 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@page import="java.util.ArrayList"%>
 <!DOCTYPE html>
 <html>
 <head>
-<!-- <meta charset="ISO-8859-1"> -->
-	<title>Alta Gestor</title>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<link rel="icon" type="image/png" href="resources/assets/images/icons/favicon.ico"/>
-	<link rel="stylesheet" type="text/css" href="resources/assets/vendor/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="resources/assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="resources/assets/vendor/animate/animate.css">	
-	<link rel="stylesheet" type="text/css" href="resources/assets/vendor/css-hamburgers/hamburgers.min.css">
-	<link rel="stylesheet" type="text/css" href="resources/assets/vendor/select2/select2.min.css">
-	<link rel="stylesheet" type="text/css" href="resources/assets/css/util.css">
-	<link rel="stylesheet" type="text/css" href="resources/assets/css/main.css">
-
-	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-	
-	<style>
-	     body {
-        font-family: 'Roboto', sans-serif;
-      }
-	
-	</style>
-<title>Insert title here</title>
+	<title>Alta Gestor</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="resources/assets/images/icons/favicon.ico"/>
+    <link rel="stylesheet" href="/geoserver/style.css" type="text/css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+ 	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.pink-light_blue.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.5.0/proj4.js"></script>
+    <script src="https://epsg.io/32721.js"></script>
+ 	<script src="http://svn.osgeo.org/metacrs/proj4js/trunk/lib/proj4js-compressed.js"></script>
+  	<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+  	<link  rel="stylesheet" src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css"></link>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+   	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"><meta content="width=device-width, initial-scale=1" name="viewport" />
+	<link rel="stylesheet" href="home.css">
+	<script src="qrcode.js"></script>
+	<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
 </head>
 <body>
-	<div class="container-fluid">
+	<jsp:include page="header.jsp" />
+	<div id="container">
 		<div class="align-content-center pt-2">
 			<div class="py-5 text-center" style="color: #35CA97;">
 				<h2>Ingresar nuevo gestor</h2>
@@ -56,9 +52,6 @@
 						
 					</div>
 					<div class="col-12 col-md-6 col-lg-4">
-					<!-- 	<label for="pwd">Re-enter password *</label> <input type="password"
-							class="form-control" id="pwd" placeholder="Ingresar Contrasea"
-							name="pswd" required="true"> -->
 					</div>
 				</div>
 
@@ -81,8 +74,8 @@
 
 								<div id="collapseOne" class="collapse"
 									aria-labelledby="headingOne" data-parent="#accordion">
-									<div class="card-body">
-										<%-- <%
+									<%-- <div class="card-body">
+										<%
 											ArrayList<String> tree = (ArrayList<String>) request
 													.getSession().getAttribute("tree");
 											for (String nombreZona : tree) {
@@ -107,8 +100,8 @@
 										<%
 											}
 									/* 			it.remove(); // avoids a ConcurrentModificationException */
-										%> --%>
-									</div>
+										%>
+									</div> --%>
 
 								</div>
 							</div>
@@ -118,8 +111,9 @@
 
 					<div class="form-check col-12 col-md-6 col-lg-4">
 						<div class="col">
-							<img src="http://localhost:8181/geoserver/wms?bbox=551808,6133362,589385,6159930&styles=polygon,polygon&Format=image/png&request=GetMap&layers=sgrm:depto_p,sgrm:sig_comunales&width=550&height=250&srs=EPSG:32721">
-
+							<label for="pwd">CI *</label> <input type="text"
+							class="form-control" id="pwdd"
+							name="pswd" required="true">
 						</div>
 					</div>
 
@@ -137,6 +131,10 @@
 			</form>
 		</div>
 	</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
