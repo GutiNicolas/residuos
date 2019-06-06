@@ -41,7 +41,7 @@ public class CContenedoresyZonas implements CContenedoresyZonasRemote, CContened
 		else
 			return false;
 	}
-	
+	@Override
     public List<DtZona> obtenerZonas(){
     	List<Zona> zonas = mem.getAllZonas();
     	List <DtZona> dtzonas= new ArrayList<DtZona>();
@@ -51,19 +51,29 @@ public class CContenedoresyZonas implements CContenedoresyZonasRemote, CContened
 		}
 		return dtzonas;
     }
-    
+    @Override
     public String altaCamion(String matricula, long idZona) {
+    	System.out.println("estoy en alta camion");
 		Camion camion = new Camion(matricula);
+		System.out.println("creo la instancia del camion");
 		Zona zona = mem.buscarZona(idZona);
-		zona.agregarACuadrilla(camion);
+		System.out.println("obtube la zona "+ zona.getIdZona());
+		
+		System.out.println("agregue el camion a la cuadrilla y llamo a la persistencia");
 		mem.altaCamion(camion);
+		//zona.agregarACuadrilla(camion);
+		camion.setZona(zona);
+		
+//		mem.editZona(zona);
+		mem.editCamion(camion);
+		System.out.println("agregado a la base");
     	return "Se agrego el camion " + camion.getIdCamion() +" a la cuadrilla de la zona "+ zona.getIdZona();
     	
     }
-	@Override
-	public ArrayList<Zona> getZonas() {
-		// TODO Auto-generated method stub
-		return mem.getZonas();
-	}
+//	@Override
+//	public ArrayList<Zona> getZonas() {
+//		// TODO Auto-generated method stub
+//		return mem.getZonas();
+//	}
 
 }

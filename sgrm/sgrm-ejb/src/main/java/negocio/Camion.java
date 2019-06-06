@@ -40,7 +40,7 @@ public class Camion implements Serializable {
 		this.matricula = matricula;
 	}
 
-	public long getIdCamion() {
+	public int getIdCamion() {
 		return idCamion;
 	}
 
@@ -54,6 +54,14 @@ public class Camion implements Serializable {
 
 	public void setMatricula(String matricula) {
 		this.matricula = matricula;
+	}
+	
+	public Zona getZona() {
+		return zona;
+	}
+
+	public void setZona(Zona zona) {
+		this.zona = zona;
 	}
 
 	public static long getSerialversionuid() {
