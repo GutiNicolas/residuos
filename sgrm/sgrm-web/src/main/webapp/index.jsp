@@ -33,6 +33,15 @@
 <link rel="stylesheet" href="home.css">
 <script src="qrcode.js"></script>
 <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+
+<style> 
+input[type=button], input[type=submit], input[type=reset] {
+  background-color: #51cf92;
+  border: none;
+  color: white;
+}
+</style>
+
 </head>
 <body>
 	<jsp:include page="header.jsp" />
@@ -41,21 +50,19 @@
 			<div class="col-12 col-md-4">
 				<div class="text-center">
 					<div class="margen-arriba">
-						<!-- 						<div class="formulario-atras"> -->
 						<div class="text-center">
-							<h4 style="color: #0B0500">Busqueda de contenedor</h4>
+							<h2 class="pl-5" align="left" style="color: #00bfdf"><strong>Criterios de búsqueda</strong></h2>
 						</div>
-						<!-- 							<form class="text-left" style="height: 500px"> -->
 						<form class="formulario-bk m-lg-2 m-sm-5">
 							<div class="form-row align-items-center px-3">
-								<label for="exampleFormControlSelect1">Tipo de Almacenamiento</label>
+								<label for="exampleFormControlSelect1"><strong>Tipo de Almacenamiento</strong></label>
 								<div class="col-12 col-md-8 mb-3">
 									<select class="form-control" id="tipocont">
 										<option value="None">Ninguno</option>
 										<option value="1">Pilas</option>
 										<option value="2">Papel</option>
-										<option value="0">Plasticos</option>
-										<option value="3">Organico</option>
+										<option value="0">Plásticos</option>
+										<option value="3">Orgánico</option>
 										<option value="4">Vidrio</option>
 									</select>
 								</div>
@@ -66,7 +73,7 @@
 							</div>
 							
 							<div class="form-row px-3">
-								<label for="exampleFormControlSelect1">Estado del contenedor</label>
+								<label for="exampleFormControlSelect1"><strong>Estado del contenedor</strong></label>
 								<div class="col-12 col-md-8 mb-3">
 									<select class="form-control" id="estadocont">
 										<option value="None">Ninguno</option>
@@ -82,10 +89,10 @@
 							</div>
 
 							<div class="form-row px-3">
-							<label for="exampleFormControlSelect1">Buscar por interseccion de calles</label>
+							<label for="exampleFormControlSelect1"><strong>Interseccion de calles</strong></label>
 								<div class="col-12 col-md-8 mb-3">
 									<input type="text" class="form-control" id="calleuno" aria-describedby="emailHelp" placeholder="Calle 1">
- 							 		<input type="text" class="form-control" id="calledos" aria-describedby="emailHelp" placeholder="Calle 2">  
+ 							 		<input type="text" class="form-control mt-2" id="calledos" aria-describedby="emailHelp" placeholder="Calle 2">  
 								</div>
 								<div class="col-12 col-md-4 mb-3">
 									 <input id="clickMe3" type="button" value="Buscar" class="btn btn-dark" onclick="buscarCalle();" />
@@ -93,17 +100,17 @@
 							</div>
 							
 							<div class="form-row px-3">
-							<label for="exampleFormControlSelect1">Buscar por localizacion actual</label>
-								<div class="col-12 col-md-8 mb-3">
-													 
-								</div>
+							<label for="exampleFormControlSelect1"> 
+								<i class="fas fa-crosshairs fa-lg ml-2 pr-2"></i> 
+								<strong>Localización actual</strong>
+							</label>
 								<div class="col-12 col-md-4 mb-3">
 									 <input id="clickMe3" type="button" value="Buscar" class="btn btn-dark" onclick="buscarGPS();" />
 								</div>
 							</div>
 							
 							<div class="form-row align-items-center px-3">
-								<br><label for="exampleFormControlSelect1">Doble-Click para
+								<br><label for="exampleFormControlSelect1"> <i class="fas fa-info-circle"></i> Haga doble-click sobre el mapa para
 									buscar por Geolocalizacion</label>
 							</div>
 						</form>
@@ -425,7 +432,7 @@
        displaySnap(evt.coordinate);
      });
 
-
+	var transactWFS = function(p, f){
     var node;
     switch (p) {
         case 'insert':
@@ -451,7 +458,7 @@
         layerWFS.getSource().refresh();
         });
 
-
+}
 /*selectFeat.getFeatures().on('change:length', function (e) {
     transactWFS('delete', e.target.item(0));
 }); */
@@ -657,6 +664,7 @@ $('button').click(function () {
 
 
 
+	
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script
@@ -668,8 +676,6 @@ $('button').click(function () {
 		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 		crossorigin="anonymous"></script>
 		
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-		crossorigin="anonymous"></script>
+		
 </body>
 </html>

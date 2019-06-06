@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="icon" type="image/png" href="resources/assets/images/icons/favicon.ico"/>
 <meta charset="UTF-8">
 <title>Reportar Contenedor</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
