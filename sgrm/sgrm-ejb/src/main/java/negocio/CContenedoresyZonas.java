@@ -21,6 +21,7 @@ import persistencia.MemoryLocal;
 @Stateless
 @LocalBean
 public class CContenedoresyZonas implements CContenedoresyZonasRemote, CContenedoresyZonasLocal {
+
 	
 	@EJB
 	MemoryLocal mem;
@@ -41,8 +42,27 @@ public class CContenedoresyZonas implements CContenedoresyZonasRemote, CContened
 		else
 			return false;
 	}
+	
 	@Override
-    public List<DtZona> obtenerZonas(){
+	public String modEstadoContenedor(int id, ContenedorEstado cEstado) {
+		String res;
+		long clave = id;
+		Contenedor cont = mem.findContenedor(clave);
+		ContenedorEstado cestado = cEstado;
+		System.out.println("Estoy dentro de modEstadoContenedor y cestado es: " + cestado);
+		cont.setcEstado(cestado);
+		System.out.println("Pase el setter");
+		System.out.println("Luego de setear el estado del contenedor: " + cont.getcEstado());
+		if(mem.modificarEstadoContenedor(cont)) {
+			res = "modificado";
+		}else {
+			res = "no_modificado";
+		}
+		return res;
+	}
+
+	@Override
+    	public List<DtZona> obtenerZonas(){
     	List<Zona> zonas = mem.getAllZonas();
     	List <DtZona> dtzonas= new ArrayList<DtZona>();
 		for (Zona z: zonas) {
@@ -50,9 +70,10 @@ public class CContenedoresyZonas implements CContenedoresyZonasRemote, CContened
 			dtzonas.add(dtz);
 		}
 		return dtzonas;
-    }
-    @Override
-    public String altaCamion(String matricula, long idZona) {
+   	}
+
+    	@Override
+    	public String altaCamion(String matricula, long idZona) {
     	System.out.println("estoy en alta camion");
 		Camion camion = new Camion(matricula);
 		System.out.println("creo la instancia del camion");
@@ -69,7 +90,7 @@ public class CContenedoresyZonas implements CContenedoresyZonasRemote, CContened
 		System.out.println("agregado a la base");
     	return "Se agrego el camion " + camion.getIdCamion() +" a la cuadrilla de la zona "+ zona.getIdZona();
     	
-    }
+    	}
 //	@Override
 //	public ArrayList<Zona> getZonas() {
 //		// TODO Auto-generated method stub

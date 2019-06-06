@@ -29,6 +29,9 @@
         <security>
             <user-name>sgrm</user-name>
             <password>sgrm123</password>
+
+<!--             <user-name>postgres</user-name> -->
+<!--             <password>postgres</password> -->
         </security>
     </datasource>
 </datasources>

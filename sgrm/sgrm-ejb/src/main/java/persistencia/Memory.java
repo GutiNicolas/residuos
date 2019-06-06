@@ -19,6 +19,7 @@ import javax.persistence.criteria.Root;
 
 
 import negocio.Administrador;
+import negocio.Contenedor;
 import negocio.Camion;
 import negocio.Final;
 import negocio.Gestor;
@@ -36,7 +37,11 @@ import negocio.ZonaEstado;
 public class Memory implements MemoryRemote, MemoryLocal {
 	
 //	@PersistenceContext(unitName= "sgrm-pu")
-//	private EntityManager mng;
+//	private EntityManager manager;
+//	EntityManagerFactory emf = Persistence.createEntityManagerFactory("sgrm-pu");
+//	EntityManager manager = emf.createEntityManager();
+	@PersistenceContext(unitName= "sgrm-pu")
+	private EntityManager mng;
 	
 	EntityManagerFactory emf = Persistence.createEntityManagerFactory("sgrm-pu");
 	EntityManager manager = emf.createEntityManager();
@@ -94,6 +99,7 @@ public class Memory implements MemoryRemote, MemoryLocal {
 			//registro al usuario
 			usu = usuFinal;
 			//manager.persist(usu);	
+		//	manager = emf.createEntityManager();
 	//		manager = emf.createEntityManager();
 			manager.getTransaction().begin();
 			usu = manager.merge(usu);
@@ -135,6 +141,23 @@ public class Memory implements MemoryRemote, MemoryLocal {
 		return res;
 	}
 	
+	public boolean modificarEstadoContenedor(Contenedor cont) {
+		try {
+			mng.merge(cont);
+			return true;
+		}catch (Exception e) {
+			System.out.println("Error Modificando el estado: " + e);
+			return false;
+		}
+	}
+	
+	@Override
+	public Contenedor findContenedor(long id) {
+		
+		Contenedor cont = manager.find(Contenedor.class, id);
+		
+		return cont;
+	}
 	@Override
 	public void altaCamion(Camion camion) {
 		// TODO Auto-generated method stub

@@ -39,6 +39,7 @@ public class Contenedor  implements Serializable {
 	@JoinColumn(name="zona_id")
 	private Zona zona;
 	
+
 	@Lob @Basic(fetch=FetchType.LAZY)
 	@Column(name = "GEOMETRY", columnDefinition = "geometry")
 	private String geometry;
@@ -50,6 +51,7 @@ public class Contenedor  implements Serializable {
 		this.cEstado = null;
 		this.finales = null;
 		this.zona = null;
+
 	}
 
 	public Contenedor(long idContenedor, TipoResiduos tResiduos, ContenedorEstado cEstado, List<Final> finales,
