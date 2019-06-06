@@ -18,7 +18,8 @@ import negocio.CContenedoresyZonasLocal;
 /**
  * Servlet implementation class Camiones
  */
-@WebServlet("/Camiones")
+//@WebServlet("/Camiones")
+@WebServlet ("/Camiones")
 public class Camiones extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

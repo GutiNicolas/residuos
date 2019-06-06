@@ -39,7 +39,7 @@
 <body>
 	<jsp:include page="header.jsp" />
 	<div id="container">
-		<div class="row pt-10">
+		<div class="row">
 			<div class="col-12 col-md-4">
 				<div class="text-left">
 					<div class="margen-arriba">
@@ -63,7 +63,7 @@
 										<option value="4">Vidrio</option>
 									</select>
 								</div>
-								<div class="col-12 col-md-4 mb-3">
+								<div class="row col-12">
 									<br>
 									<br>
 									<div id="codigoqr"></div>
