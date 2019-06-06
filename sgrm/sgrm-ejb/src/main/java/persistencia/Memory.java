@@ -14,6 +14,7 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 import negocio.Administrador;
+import negocio.Contenedor;
 import negocio.Final;
 import negocio.Gestor;
 import negocio.Usuario;
@@ -29,10 +30,10 @@ import negocio.ZonaEstado;
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 public class Memory implements MemoryRemote, MemoryLocal {
 	
-//	@PersistenceContext(unitName= "sgrm-pu")
-//	private EntityManager manager;
-	EntityManagerFactory emf = Persistence.createEntityManagerFactory("sgrm-pu");
-	EntityManager manager = emf.createEntityManager();
+	@PersistenceContext(unitName= "sgrm-pu")
+	private EntityManager manager;
+//	EntityManagerFactory emf = Persistence.createEntityManagerFactory("sgrm-pu");
+//	EntityManager manager = emf.createEntityManager();
 	private List<Usuario> usuarios;
 	private List<Gestor> gestores;
 	
@@ -87,7 +88,7 @@ public class Memory implements MemoryRemote, MemoryLocal {
 			//registro al usuario
 			usu = usuFinal;
 			//manager.persist(usu);	
-			manager = emf.createEntityManager();
+		//	manager = emf.createEntityManager();
 			manager.getTransaction().begin();
 			usu = manager.merge(usu);
 			manager.getTransaction().commit();	
@@ -126,6 +127,24 @@ public class Memory implements MemoryRemote, MemoryLocal {
 			res = true;
 		}
 		return res;
+	}
+	
+	public boolean modificarEstadoContenedor(Contenedor cont) {
+		try {
+			manager.merge(cont);
+			return true;
+		}catch (Exception e) {
+			System.out.println("Error Modificando el estado: " + e);
+			return false;
+		}
+	}
+	
+	@Override
+	public Contenedor findContenedor(long id) {
+		
+		Contenedor cont = manager.find(Contenedor.class, id);
+		
+		return cont;
 	}
 
 }

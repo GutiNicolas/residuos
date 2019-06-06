@@ -6,5 +6,7 @@ import javax.ejb.Remote;
 public interface CContenedoresyZonasRemote {
 	
 	public boolean existeContenedor(int id);
+	
+	public String modEstadoContenedor(int id, ContenedorEstado cEstado);
 
 }

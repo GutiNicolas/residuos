@@ -32,6 +32,7 @@ public class Contenedor  implements Serializable {
 	@ManyToOne
 	private Zona zona;
 	
+
 	public Contenedor() {
 		super();
 		this.idContenedor = 0;
@@ -39,6 +40,7 @@ public class Contenedor  implements Serializable {
 		this.cEstado = null;
 		this.finales = null;
 		this.zona = null;
+
 	}
 
 	public Contenedor(long idContenedor, TipoResiduos tResiduos, ContenedorEstado cEstado, List<Final> finales,
