@@ -15,7 +15,8 @@ import negocio.CUsuarioRemote;
 /**
  * Servlet implementation class login
  */
-@WebServlet("/servletLogin")
+//@WebServlet("/servletLogin")
+@WebServlet ("/servletLogin")
 public class login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	

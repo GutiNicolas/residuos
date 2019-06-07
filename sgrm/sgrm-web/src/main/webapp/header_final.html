@@ -1,45 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Reciclando</title>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Roboto"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+	integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+	crossorigin="anonymous">
 
 <style>
-	body {
-		font-family: 'Roboto', sans-serif;
-	}
+body {
+	font-family: 'Roboto', sans-serif;
+}
 </style>
 </head>
 <body>
-	<nav class="navbar navbar-expand-sm navbar-light" style="background-color: #00bfdf;">
-
-				<a class="navbar-brand" href="index.html"> 
-					<img src="resources/graficos/icono.svg" width="30"
-					height="30" class="d-inline-block align-top" alt="">
-						<span style="color: #fff;">
-<!-- 						<i class="fas fa-recycle"></i> -->
-							<strong>Reciclando</strong>
-						</span>
-				</a> 
-
-<!-- 			<ul class="nav justify-content-end"> -->
+	<nav class="navbar navbar-expand-lg navbar-light"
+		style="background-color: #00bfdf;">
+		<a class="navbar-brand" href="index.jsp"> <img
+			src="resources/graficos/icono.svg" width="30" height="30"
+			class="d-inline-block align-top" alt=""> <span
+			style="color: #fff;"> <strong>Reciclando</strong>
+		</span>
+		</a>
+		<button class="navbar-toggler" style="background-color: #00bfdf;"
+			type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="nav navbar-nav ml-4 navbar-right px-lg-2">
-<!-- 				<li class="nav-item active"> -->
-<!-- 					<a class="btn btn-outline-light" href="sLogout" role="button">Cerrar sesión</a> -->
-<!-- 				</li> -->
-					<li> <a class ="nav-link" href="Logout">
-					  	<span style="color: #fff;">
-				          		<i class="fas fa-sign-out-alt"></i>
-				    	     Cerrar Sesión</span>
-					 	</a>
-					  </li>
+				<li><a class="nav-link px-3" href="index.jsp"> <span
+						style="color: #fff;"> <i class="fas fa-search"></i> Buscar
+							contenedores
+					</span>
+				</a></li>
+
+				<li class="nav-item"><a class="nav-link pl-lg-4 pr-2"
+					href="estadoZonas.jsp"> <span style="color: #fff;"> <i
+							class="fas fa-info-circle"></i> Estado de Zonas
+					</span>
+				</a></li>
+
+				<li><a class="nav-link px-3" href="Logout"> <span
+						style="color: #fff;"> <i class="fas fa-sign-out-alt"></i>
+							Cerrar SesiÃ³n
+					</span>
+				</a></li>
 			</ul>
+		</div>
+
 	</nav>
 
 </body>

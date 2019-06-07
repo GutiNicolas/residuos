@@ -4,15 +4,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import datatypes.DtZona;
 
 @Entity
+@NamedQuery(name="Zona.findAll", query="SELECT z FROM Zona z")
 public class Zona implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -30,6 +36,14 @@ public class Zona implements Serializable {
 		
 	@ManyToOne
 	private Gestor gestor;
+	
+//	@Transient
+//	private String geometry;
+	
+	@Lob @Basic(fetch=FetchType.LAZY)
+	@Column(name = "GEOMETRY", columnDefinition = "geometry")
+	private String geometry;
+	
 
 	public Zona() {
 		super();
@@ -92,6 +106,14 @@ public class Zona implements Serializable {
 
 	public void setGestor(Gestor gestor) {
 		this.gestor = gestor;
+	}
+	
+	public String getGeometry() {
+		return this.geometry;
+	}
+
+	public void setGeometry(String geometry) {
+		this.geometry = geometry;
 	}
 
 	public static long getSerialversionuid() {
