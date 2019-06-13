@@ -16,7 +16,7 @@ instalacion de los paquetes
 * [GeoServer](http://geoserver.org/) - Usado como servidor de mapas
 * [PostgreSQL with PostGIS](https://postgis.net/) - Usado como base de datos de negocio y geografica
 * [JavaScript](https://www.javascript.com/) - Dependency Management (Web de referencia de la comunidad) 
-* [Bootstrap](https://maven.apache.org/) - Dependency Management
+* [Bootstrap](https://maven.apache.org/) - Frontend css classes
 * [TurfJS](https://turfjs.org/) - Usado para el analisis de datos espaciales
 
 
