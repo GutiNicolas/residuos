@@ -27,12 +27,11 @@
         <connection-url>jdbc:postgresql://localhost:5432/residuos</connection-url>
         <driver>sgrm-ear.ear_org.postgresql.Driver_42_2</driver>
         <security>
-
             <user-name>postgres</user-name>
             <password>postgres</password>
+
 <!--             <user-name>postgres</user-name> -->
 <!--             <password>postgres</password> -->
-
         </security>
     </datasource>
 </datasources>
