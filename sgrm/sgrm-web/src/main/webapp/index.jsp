@@ -93,12 +93,14 @@
 							</div>
 							
 							<div class="form-row px-3">
-							<label for="exampleFormControlSelect1">Buscar por localizacion actual</label>
+							<label for="exampleFormControlSelect1">Buscar por localizacion actual  </label>  <input type="checkbox" id="myCheck">
 								<div class="col-12 col-md-8 mb-3">
 													 
 								</div>
 								<div class="col-12 col-md-4 mb-3">
 									 <input id="clickMe3" type="button" value="Buscar" class="btn btn-dark" onclick="buscarGPS();" />
+									 <input id="clickMe4" type="button" value="SUPER Buscar" class="btn btn-dark" onclick="buscarGlobal();" />
+									 
 								</div>
 							</div>
 							
@@ -117,7 +119,8 @@
 					class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
 					<i class="material-icons">info</i>
 				</button>
-				<div id="infoCont"></div>
+				<div id="wraptall">
+				<div id="infoCont"></div></div>
 
 				<script type="text/javascript">
 		   
@@ -163,6 +166,9 @@
             visible: true,
         	source: sourceWFS
     	});
+
+		var seleccionados = new ol.source.Vector();
+    	
 
 	    var sourceCWFS = new ol.source.Vector({
 		    loader: function (extent, resolution, projection) {
@@ -298,6 +304,90 @@
     var selectTipo = new ol.interaction.Select();
     map.addInteraction(selectTipo);
 
+
+    function buscarGlobal() {
+    	var tipoSelec = document.getElementById('tipocont');
+        var tipoVal = tipoSelec.value;
+
+		if (document.getElementById("myCheck").checked == true){ //BUSCO POR LOC REAL
+				var tipoSelec = document.getElementById('tipocont');
+		        var tipoVal = tipoSelec.value;
+		        var estadoSelec = document.getElementById('estadocont');
+		        var estadoVal = estadoSelec.value;
+
+		        if(tipoVal != 'None' && estadoVal != 'None') { //BUSCO POR TIPO Y ESTADO
+			        
+		        	var a = buscarEstadoReturn();
+		        	buscarGPSArray(a);
+		        	
+			    }
+		        if (tipoVal != 'None' && estadoVal == 'None') { //BUSCO POR TIPO Y NO POR ESTADO
+		        	var a = buscarTipoReturn();
+		        	buscarGPSArray(a);
+			   	}
+			   	if (tipoVal == 'None' && estadoVal != 'None') { //BUSCO POR ESTADO Y NO POR TIPO
+			   		var a = buscarEstadoReturn();
+			   		buscarGPSArray(a);
+			   		
+				}
+				if(tipoVal == 'None' && estadoVal == 'None') { //ALERT
+					alert("SELECCIONE UN TIPO O UN ESTADO PARA EL CONTENEDOR");
+				}
+			
+			
+		} else { //NO BUSCO POR LOC REAL
+			var calleuno = document.getElementById('calleuno');
+	        var calleunoVal = calleuno.value.toUpperCase();
+	        var calledos = document.getElementById('calledos');
+	        var calledosVal = calledos.value.toUpperCase();
+			if (calleunoVal != '' && calledosVal != '') {//ENTONCES BUSCO POR CALLES
+				var tipoSelec = document.getElementById('tipocont');
+		        var tipoVal = tipoSelec.value;
+		        var estadoSelec = document.getElementById('estadocont');
+		        var estadoVal = estadoSelec.value;
+
+		        if(tipoVal != 'None' && estadoVal != 'None') { //BUSCO POR TIPO Y ESTADO
+			        
+		        	var a = buscarEstadoReturn();
+		        	buscarCalleconArray(a);
+		        	
+			    }
+		        if (tipoVal != 'None' && estadoVal == 'None') { //BUSCO POR TIPO Y NO POR ESTADO
+		        	var a = buscarTipoReturn();
+		        	buscarCalleconArray(a);
+			   	}
+			   	if (tipoVal == 'None' && estadoVal != 'None') { //BUSCO POR ESTADO Y NO POR TIPO
+			   		var a = buscarEstadoReturn();
+			   		buscarCalleconArray(a);
+			   		
+				}
+				if(tipoVal == 'None' && estadoVal == 'None') { //ALERT
+					alert("SELECCIONE UN TIPO O UN ESTADO PARA EL CONTENEDOR");
+				}
+			} else { //NO BUSCO POR CALLES ni por LOC REAL
+				var tipoSelec = document.getElementById('tipocont');
+		        var tipoVal = tipoSelec.value;
+		        var estadoSelec = document.getElementById('estadocont');
+		        var estadoVal = estadoSelec.value;
+
+		        if(tipoVal != 'None' && estadoVal != 'None') { //BUSCO POR TIPO Y ESTADO
+		        	buscarEstado();
+			    }
+		        if (tipoVal != 'None' && estadoVal == 'None') { //BUSCO POR TIPO Y NO POR ESTADO
+		        	buscarTipo();
+			   	}
+			   	if (tipoVal == 'None' && estadoVal != 'None') { //BUSCO POR ESTADO Y NO POR TIPO
+			   		buscarEstado();
+				}
+				if(tipoVal == 'None' && estadoVal == 'None') { //ALERT
+					alert("SELECCIONE UN TIPO O UN ESTADO PARA EL CONTENEDOR");
+				}
+			}
+		}        
+        
+    }
+
+
     function buscarTipo() {
     	var tipoSelec = document.getElementById('tipocont');
         var tipoVal = tipoSelec.value;
@@ -314,6 +404,25 @@
 		        }
         	}
 	        
+        }
+    }
+
+    function buscarTipoReturn() {
+    	var tipoSelec = document.getElementById('tipocont');
+        var tipoVal = tipoSelec.value;
+        if (tipoVal !=='None') {
+			selectTipo.getFeatures().clear();
+			var feats = [];
+
+			var contens = sourceWFS.getFeatures();
+	        for(var j = 0; j < contens.length; j++){
+	            var cn = contens[j];
+	            var cnv = cn.get('tresiduos');
+	            if(cnv == tipoVal) {
+					feats.push(cn);
+		        }
+        	}
+	        return feats;
         }
     }
 
@@ -353,6 +462,42 @@
         }
     }
 
+    function buscarEstadoReturn() {
+    	var estadoSelec = document.getElementById('estadocont');
+        var estadoVal = estadoSelec.value;
+        var tipoSelec = document.getElementById('tipocont');
+        var tipoVal = tipoSelec.value;
+        if (estadoVal !=='None' && tipoVal !=='None') {
+        	selectTipo.getFeatures().clear();
+			var feats = [];
+
+			var contens = sourceWFS.getFeatures();
+	        for(var j = 0; j < contens.length; j++){
+	            var cn = contens[j];
+	            var cnv = cn.get('tresiduos');
+	            var cne = cn.get('cestado');
+	            if(cnv == tipoVal && cne == estadoVal) {
+					feats.push(cn);
+		        }
+        	}      	
+			return feats;
+        }
+        if (estadoVal !=='None' && tipoVal =='None') {
+			selectTipo.getFeatures().clear();
+			var feats = [];
+
+			var contens = sourceWFS.getFeatures();
+	        for(var j = 0; j < contens.length; j++){
+	            var cn = contens[j];
+	            var cnv = cn.get('cestado');
+	            if(cnv == estadoVal) {
+					feats.push(cn);
+		        }
+        	}
+	        return feats;
+        }
+    }
+
     function buscarGPS() {
 
     	navigator.geolocation.getCurrentPosition(showPosition);    	
@@ -367,6 +512,27 @@
     	  	selectTipo.getFeatures().clear();
   			var feats = selectTipo.getFeatures();
          	var closestFeature = sourceWFS.getClosestFeatureToCoordinate(nuevap);
+         	feats.push(closestFeature);	
+    	}
+
+    function buscarGPSArray(arr) {
+    	seleccionados.clear();
+        seleccionados.addFeatures(arr);
+        navigator.geolocation.getCurrentPosition(showPositionDOS);    	
+ 
+    }
+
+    
+
+    function showPositionDOS(position) {
+    	
+    	  var latlon = position.coords.latitude + "," + position.coords.longitude;
+			alert(latlon);
+			var nuevap = proj4("+proj=utm +zone=21 +south +datum=WGS84 +units=m +no_defs", [position.coords.longitude,position.coords.latitude]);
+			alert(nuevap);
+    	  	selectTipo.getFeatures().clear();
+  			var feats = selectTipo.getFeatures();
+         	var closestFeature = seleccionados.getClosestFeatureToCoordinate(nuevap);
          	feats.push(closestFeature);	
     	}
 
@@ -414,6 +580,51 @@
 
     }
 
+    function buscarCalleconArray(arr) {
+    	var calleuno = document.getElementById('calleuno');
+        var calleunoVal = calleuno.value.toUpperCase();
+        var calledos = document.getElementById('calledos');
+        var calledosVal = calledos.value.toUpperCase();
+
+        var callea=[];
+        var calleb=[];
+
+        var calles = sourceCWFS.getFeatures();
+        for(var j = 0; j < calles.length; j++){
+            var cn = calles[j];
+            var cnv = cn.get('nom_calle');        
+            if(cnv == calleunoVal) {
+				callea.push(cn);			
+	        }
+    	}   	
+
+        for(var i = 0; i < calles.length; i++){
+            var cn = calles[i];
+            var cnv = cn.get('nom_calle');
+            if(cnv == calledosVal) {
+            	calleb.push(cn);			
+	        }
+    	}
+
+        var format = new ol.format.GeoJSON();
+        seleccionados.clear();
+        seleccionados.addFeatures(arr);
+		for(var a = 0; a < callea.length; a++) {
+			var lineaturf = format.writeFeatureObject(callea[a], {'featureProjection': 'EPSG:4326'});
+			for(var b = 0; b < calleb.length; b++) {
+				var lineaturfdos = format.writeFeatureObject(calleb[b], {'featureProjection': 'EPSG:4326'});
+				var ints = turf.lineIntersect(lineaturf,lineaturfdos);
+				if(ints.features.length/* ints != null */){
+					selectTipo.getFeatures().clear();
+					var feats = selectTipo.getFeatures();
+			       	var closestFeature = seleccionados.getClosestFeatureToCoordinate(ints.features[0].geometry.coordinates);
+			       	feats.push(closestFeature);				
+				}
+			}
+		}
+
+    }
+
    var displaySnap = function(coordinate) {
 	   	selectTipo.getFeatures().clear();
 		var feats = selectTipo.getFeatures();
@@ -425,7 +636,7 @@
        displaySnap(evt.coordinate);
      });
 
-
+   var transactWFS = function (p, f) {
     var node;
     switch (p) {
         case 'insert':
@@ -450,7 +661,7 @@
     	layerWFS.getSource().clear();
         layerWFS.getSource().refresh();
         });
-
+   }
 
 /*selectFeat.getFeatures().on('change:length', function (e) {
     transactWFS('delete', e.target.item(0));
@@ -630,10 +841,27 @@ $('button').click(function () {
                 
                 	
             	}
+
+            	var estado;
+            	switch (e.target.item(0).get('cestado')) {
+            	case 0:
+					estado= '<p style="color: yellow">Lleno</p>';
+                	break;
+            	case 1:
+            		estado= '<p style="color: red">Roto</p>';
+                	break;
+            	case 2:
+            		estado= '<p style="color: green">Disponible</p>';
+            		break;
+            	
+                
+                	
+            	}
+            	
                 var info = document.getElementById('infoCont');
                 info.innerHTML = '';
                 if (e.target.item(0).getId().includes("cont")){
-                info.innerHTML = e.target.item(0).getId() + '  TIPO: ' + tipore + '  ID Zona: ' + e.target.item(0).get('zona_idzona');
+                info.innerHTML ='TIPO: ' + tipore + '<br /> ESTADO: '+ estado + '<br />  ID Zona: ' + e.target.item(0).get('zona_idzona') + '<br /> ID: ' + e.target.item(0).getId() ;
                 }
             });
             map.addInteraction(interaction);
@@ -642,6 +870,11 @@ $('button').click(function () {
         default:
             break;
     }
+});
+
+$( document ).ready(function() {
+    map.updateSize();
+    console.log( "ready!" );
 });
 
 
@@ -670,8 +903,6 @@ $('button').click(function () {
 		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 		crossorigin="anonymous"></script>
 		
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-		crossorigin="anonymous"></script>
+	
 </body>
 </html>

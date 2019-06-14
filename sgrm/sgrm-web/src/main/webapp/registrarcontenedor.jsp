@@ -297,16 +297,18 @@ function generarQR() {
     for(var j = 0; j < contens.length; j++){
         var cn = contens[j];
         var cnv = cn.getId().split(".");
-		if(max < cnv[1] ){
-			max = cnv[1];
+        var gran = parseInt(cnv[1], 10);
+		if(max < gran ){
+			max = gran; 
+			
 		}
     }
     max++;
    // USAR max+1
     let qrcode = new QRCode("codigoqr", {
 		text: "http://localhost:8080/sgrm-web/reportarContenedor?id="+max,
-		width: 177,
-		height: 177,
+		width: 120,
+		height: 120,
 		colorDark: "#37323E",
 		colorLight: "#FBFFF1",
 		correctLevel: QRCode.CorrectLevel.H
