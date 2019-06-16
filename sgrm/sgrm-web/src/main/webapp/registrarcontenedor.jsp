@@ -344,8 +344,10 @@
 						for (var j = 0; j < contens.length; j++) {
 							var cn = contens[j];
 							var cnv = cn.getId().split(".");
-							if (max < cnv[1]) {
-								max = cnv[1];
+							var gran = parseInt(cnv[1], 10);
+							if(max < gran ){
+								max = gran; 
+								
 							}
 						}
 						max++;
@@ -458,7 +460,6 @@
 																		.refresh();
 															});
 											break;
-
 										case 'btnLine':
 											interaction = new ol.interaction.Draw(
 													{
@@ -473,7 +474,6 @@
 																e.feature);
 													});
 											break;
-
 										case 'btnArea':
 											interaction = new ol.interaction.Draw(
 													{
