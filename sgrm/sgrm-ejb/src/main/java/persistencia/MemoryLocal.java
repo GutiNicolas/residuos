@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
+import datatypes.DtZona;
 import negocio.Contenedor;
 import negocio.Camion;
 import negocio.Final;
@@ -28,6 +29,8 @@ public interface MemoryLocal {
 
 	void editZona(Zona zona);
 	public abstract void editCamion(Camion camion);
+	
+	public List<DtZona> getZonas(List<DtZona> zonas);
 
 //	public ArrayList<Zona> getZonas();
 

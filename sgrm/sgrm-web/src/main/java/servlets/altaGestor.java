@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import datatypes.DtZona;
 import negocio.CContenedoresyZonasLocal;
 import negocio.CUsuarioRemote;
+import negocio.Zona;
 
 /**
  * Servlet implementation class altaGestor
@@ -39,8 +40,10 @@ public class altaGestor extends HttpServlet {
 response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		List<DtZona> zonas;
-		System.out.println("estoy en el GET de camiones");
-		zonas = icz.obtenerZonas();
+		List<DtZona> res;
+		System.out.println("estoy en el GET de gestor");
+		res = icz.obtenerZonas();
+		zonas = icz.getZonas(res);
 		request.setAttribute("lstZonas", zonas);			
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/altaGestor.jsp");
 		dispatcher.forward(request, response);
@@ -52,8 +55,7 @@ response.getWriter().append("Served at: ").append(request.getContextPath());
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
-		System.out.println("estoy en el servlet de login");
+		System.out.println("estoy en el servlet alta gestor");
 		String adminEmail = (String) request.getSession().getAttribute("usulogueado");
 		String nombre= request.getParameter("email");
 		String apellido = request.getParameter("pswd");
@@ -66,16 +68,20 @@ response.getWriter().append("Served at: ").append(request.getContextPath());
 		System.out.println("exito:"+exito);
 		RequestDispatcher rl;
 		if (exito) { 
+			System.out.println("antes de persistir la zona ");
 			boolean exitoZona = cur.altaZonaGestor(idZon, null, ci);
+			System.out.println("exito:"+exitoZona);
 			if (exitoZona) {
 				rl = request.getRequestDispatcher("/index.jsp");
+				rl.forward(request, response);
 			} else {
-				rl = request.getRequestDispatcher("/altaGestor.html");
+				rl = request.getRequestDispatcher("/altaGestor.jsp");
+				rl.forward(request, response);
 			}
 		} else {
-			rl = request.getRequestDispatcher("/index.jsp");
+			rl = request.getRequestDispatcher("/altaGestor.jsp");
+			rl.forward(request, response);
 		}
-		rl.forward(request, response);
 	}
 
 }
