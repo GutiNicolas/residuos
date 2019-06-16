@@ -36,14 +36,13 @@ public class altaGestor extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		List<DtZona> zonas;
-		System.out.println("estoy en el GET de zonas");
-//		zonas = icz.obtenerZonas();
-		zonas = null;
+		System.out.println("estoy en el GET de camiones");
+		zonas = icz.obtenerZonas();
 		request.setAttribute("lstZonas", zonas);			
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/registroCamion.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/altaGestor.jsp");
 		dispatcher.forward(request, response);
 		
 	}
@@ -55,24 +54,26 @@ public class altaGestor extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 		System.out.println("estoy en el servlet de login");
+		String adminEmail = (String) request.getSession().getAttribute("usulogueado");
 		String nombre= request.getParameter("email");
 		String apellido = request.getParameter("pswd");
 		String ci = request.getParameter("pwdd");
-		String nickAdmin = "admin"; // ToDo: obtener el nickname del administrador logeado para pasarlo por parametro
-		boolean exito = cur.altaGestor(ci, nombre, apellido, nickAdmin);
+		System.out.println("ci es -----------------------------------------------> " + ci);
+		String idZona = request.getParameter("cat");
+		long idZon = Long.parseLong(idZona);
+		System.out.println("id zona es -----------------------------------------------> " + idZona);
+		boolean exito = cur.altaGestor(ci, nombre, apellido, adminEmail);
 		System.out.println("exito:"+exito);
 		RequestDispatcher rl;
-		if (exito) {
-			long idZona = 1; // ToDo: obtener id zona del mapa 
-			String colorZona = "verde"; // ToDo: Obtener color zona del mapa
-			boolean exitoZona = cur.altaZonaGestor(idZona, colorZona, ci);
+		if (exito) { 
+			boolean exitoZona = cur.altaZonaGestor(idZon, null, ci);
 			if (exitoZona) {
-				rl = request.getRequestDispatcher("/inicio.html");
+				rl = request.getRequestDispatcher("/index.jsp");
 			} else {
 				rl = request.getRequestDispatcher("/altaGestor.html");
 			}
 		} else {
-			rl = request.getRequestDispatcher("/altaGestor.html");
+			rl = request.getRequestDispatcher("/index.jsp");
 		}
 		rl.forward(request, response);
 	}

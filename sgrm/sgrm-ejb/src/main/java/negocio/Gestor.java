@@ -17,9 +17,7 @@ public class Gestor implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer idGestor;
-	private String ci;
+	private String gestor_ci;
 	private String nombre;
 	private String apellido;	
 	
@@ -36,7 +34,7 @@ public class Gestor implements Serializable {
 
 	public Gestor(String ci, String nombre, String apellido, Administrador administrador) {
 		super();
-		this.ci = ci;
+		this.gestor_ci = ci;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.administrador = administrador;
@@ -44,7 +42,7 @@ public class Gestor implements Serializable {
 
 	public Gestor(String ci, String nombre, String apellido, List<Zona> zona, Administrador administrador) {
 		super();
-		this.ci = ci;
+		this.gestor_ci = ci;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.zona = zona;
@@ -52,11 +50,11 @@ public class Gestor implements Serializable {
 	}
 
 	public String getCi() {
-		return ci;
+		return gestor_ci;
 	}
 	
 	public void setCi(String ci) {
-		this.ci = ci;
+		this.gestor_ci = ci;
 	}
 	
 	public String getNombre() {
