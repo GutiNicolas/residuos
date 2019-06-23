@@ -120,7 +120,7 @@ input[type=button], input[type=submit], input[type=reset] {
 			</div>
 <!-- 			<div class="col-12 col-md-8 pt-md-10 my-md-20 colornegro" style="height: 100%;"> -->
 			<div class="col-12 col-md-8 pt-md-10" style="height: 100%;">
-				<div id="map" class="map" style="width: 100%; height: 100%; min-height: 270px; position:fixed"></div>
+				<div id="map" class="map col-12 col-md-8 pt-md-10" style="width: 100%; height: 100%; min-height: 270px; position:fixed"></div>
 				<button id="btnCho"
 					class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
 					<i class="material-icons">info</i>

@@ -13,6 +13,14 @@ body {
   width: 100%;
 }
 
+/*
+.map {
+  height: auto;
+  width: auto;
+}
+*/
+
+
 #btnPoint {
   position: absolute;
   top: 10px;

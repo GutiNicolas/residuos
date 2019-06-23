@@ -45,9 +45,9 @@ input[type=button], input[type=submit], input[type=reset] {
 </head>
 <body>
 	<jsp:include page="header.jsp" />
-	<div id="container">
+	<div id="container-fluid">
 		<div class="row pt-10">
-			<div class="col-12 col-md-4">
+			<div class="col-xs-12 col-md-4">
 				<div class="text-center">
 					<div class="margen-arriba">
 						<div class="text-center">
@@ -119,15 +119,18 @@ input[type=button], input[type=submit], input[type=reset] {
 				</div>
 			</div>
 <!-- 			<div class="col-12 col-md-8 pt-md-10 my-md-20 colornegro" style="height: 100%;"> -->
-			<div class="col-12 col-md-8 pt-md-10" style="height: 100%;">
-				<div id="map" class="map" style="width: 100%; height: 100%; min-height: 270px; position:fixed"></div>
+			<div class="col-xs-12 col-md-8">
+				<div id="map" class="map" style="width: 100%; height: 100%; min-height: 270px"></div>
 				<button id="btnCho"
 					class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
 					<i class="material-icons">info</i>
 				</button>
 				<div id="infoCont"></div>
-
-				<script type="text/javascript">
+			</div>
+		</div>
+	</div>
+	
+<script type="text/javascript">
 		   
 	var map;
 	proj4.defs('EPSG:32721','+proj=utm +zone=21 +south +datum=WGS84 +units=m +no_defs');
@@ -658,13 +661,6 @@ $('button').click(function () {
 
 
     </script>
-
-			</div>
-		</div>
-	</div>
-
-
-
 	
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
