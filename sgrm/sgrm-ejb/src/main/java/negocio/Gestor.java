@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -15,6 +17,7 @@ public class Gestor implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
+	private String gestor_ci;
 	private String nombre;
 	private String apellido;	
 	
@@ -29,21 +32,31 @@ public class Gestor implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Gestor(String nombre, String apellido, Administrador administrador) {
+	public Gestor(String ci, String nombre, String apellido, Administrador administrador) {
 		super();
+		this.gestor_ci = ci;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.administrador = administrador;
 	}
 
-	public Gestor(String nombre, String apellido, List<Zona> zona, Administrador administrador) {
+	public Gestor(String ci, String nombre, String apellido, List<Zona> zona, Administrador administrador) {
 		super();
+		this.gestor_ci = ci;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.zona = zona;
 		this.administrador = administrador;
 	}
 
+	public String getCi() {
+		return gestor_ci;
+	}
+	
+	public void setCi(String ci) {
+		this.gestor_ci = ci;
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}

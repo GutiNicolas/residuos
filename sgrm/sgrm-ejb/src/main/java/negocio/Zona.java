@@ -13,7 +13,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 
 import datatypes.DtZona;
 
@@ -62,9 +61,9 @@ public class Zona implements Serializable {
 		this.gestor = gestor;
 	}
 	
-	public Zona(long idZona2, ZonaEstado zEstado2, Gestor gestor) {
+	public Zona(long idZona2, String geometry, Gestor gestor) {
 		this.idZona = idZona2;
-		this.zEstado = zEstado2;
+		this.geometry = geometry;
 		this.gestor = gestor;
 	}
 
@@ -131,5 +130,15 @@ public class Zona implements Serializable {
 		
 		return true;
 		
+	}
+	
+	public List<Zona> getUnasignedZonas(List<Zona> z) {
+		List<Zona> res = new ArrayList();
+		for (Zona zon : z) {
+			if (zon.getGestor().getCi() == null) {
+				res.add(zon);
+			}
+		}
+		return res;
 	}
 }

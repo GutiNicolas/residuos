@@ -25,6 +25,7 @@ public class CContenedoresyZonas implements CContenedoresyZonasRemote, CContened
 	
 	@EJB
 	MemoryLocal mem;
+	Zona zona;
 	
 	private Map<Long,Zona> zonas = new HashMap<>();
 	private Map<Long,Contenedor> contenedores = new HashMap<>();
@@ -97,4 +98,8 @@ public class CContenedoresyZonas implements CContenedoresyZonasRemote, CContened
 //		return mem.getZonas();
 //	}
 
+    public List<DtZona> getZonas(List<DtZona> zonas) {
+    	List<DtZona> res = mem.getZonas(zonas);
+    	return res;
+    }
 }
