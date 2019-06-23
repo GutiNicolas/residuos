@@ -53,7 +53,8 @@ input[type=button], input[type=submit], input[type=reset] {
 						<div class="text-center">
 							<h2 class="pl-5" align="left" style="color: #00bfdf"><strong>Criterios de búsqueda</strong></h2>
 						</div>
-						<form class="formulario-bk m-lg-2 m-sm-5">
+<!-- 						<form class="formulario-bk m-lg-2 m-sm-5"> -->
+						<form>
 							<div class="form-row align-items-center px-3">
 								<label for="exampleFormControlSelect1"><strong>Tipo de Almacenamiento</strong></label>
 								<div class="col-12 col-md-8 mb-3">

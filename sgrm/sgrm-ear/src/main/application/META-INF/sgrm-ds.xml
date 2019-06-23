@@ -24,11 +24,11 @@
       this in META-INF/persistence.xml -->
     <datasource jndi-name="java:jboss/datasources/sgrmDS" pool-name="sgrm"
         enabled="true" use-java-context="true">
-        <connection-url>jdbc:postgresql://localhost:5432/residuos</connection-url>
+        <connection-url>jdbc:postgresql://localhost:5432/sgrm</connection-url>
         <driver>sgrm-ear.ear_org.postgresql.Driver_42_2</driver>
         <security>
-            <user-name>postgres</user-name>
-            <password>postgres</password>
+            <user-name>sgrm</user-name>
+            <password>sgrm123</password>
 
 <!--             <user-name>postgres</user-name> -->
 <!--             <password>postgres</password> -->
