@@ -51,9 +51,10 @@
 									<label for="exampleFormControlSelect1"><strong>Direccion</strong> <span style="color: #9D9D9D"> Opcional </span></label> 
 									<input type="email" class="form-control mb-4" id="direcont"
 										aria-describedby="emailHelp" placeholder="Ingresar direccion">
-								<div class="col-12 col-md-8 mb-3">
-									<label for="exampleFormControlSelect1"><strong> Tipo de
-										almacenamiento</strong></label>
+								<div >
+									<label for="exampleFormControlSelect1">
+										<strong> Tipo de almacenamiento</strong>
+									</label>
 									<select class="form-control" id="tipocont">
 										<option value="None">Ninguno</option>
 										<option value="1">Pilas</option>

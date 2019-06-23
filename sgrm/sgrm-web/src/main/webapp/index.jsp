@@ -38,7 +38,7 @@
 
 <style>
 input[type=button], input[type=submit], input[type=reset] {
-	background-color: #51cf92;
+	background-color: #FFC735;
 	border: none;
 	color: white;
 }
@@ -121,7 +121,7 @@ input[type=button], input[type=submit], input[type=reset] {
 <!-- 										class="btn btn-dark" onclick="buscarGPS();" /> -->
 									<input
 										id="clickMe4" type="button" value="Buscar"
-										class="btn btn-dark btn-block" onclick="buscarGlobal();" />
+										class="btn btn-warning btn-block" onclick="buscarGlobal();" />
 								</div>
 							</div>
 

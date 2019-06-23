@@ -30,7 +30,9 @@
 				<div class="text-center">
 					<div class="margen-arriba">
 						<div class="formulario-atras">
-						<div class="text-center"><h4 style="color: #0B0500">Formulario para crear una zona</h4></div>
+						<div class="text-center">
+							<h2 style="color: #00bfdf"> <strong>Crear una nueva zona</strong></h2>
+						</div>
 							<form class="text-left" style="height: 500px"> 
 							
 							

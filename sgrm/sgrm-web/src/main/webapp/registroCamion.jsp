@@ -26,6 +26,12 @@
 body {
 	font-family: 'Roboto', sans-serif;
 }
+
+button[type=submit], input[type=button], input[type=submit], input[type=reset] {
+	background-color: #FFC735;
+	border: none;
+	color: white;
+}
 </style>
 </head>
 <body>
@@ -52,30 +58,32 @@ body {
 	
 	<div class="container">
 		<div class="row justify-content-center col-12">	
-		<form action="Camiones" method="post">
+		<form class="was-validated" action="Camiones" method="post">
 				<div class="form-group">
-					<label for="mat">Matrícula</label> <input type="text"
-						class="form-control" id="formMat" name="mat">
-
-
-					<div class="form-group">
-						<label for="sel1">Zona:</label> <select class="form-control"
-							id="sel1" name="idZona">
-
-							<%
-		      	System.out.println("antes del for");
-					for (DtZona dtz : zonas) {
-			%>
+					<label for="mat">Matrícula</label>
+					<input type="text" class="form-control" id="formMat" name="mat" required>
+					<div class="invalid-feedback">
+					    Campo obligatorio.
+					</div>
+				</div>	
+				<div class="form-group">
+					<label for="sel1">Zona:</label>
+					<select class="form-control" id="sel1" name="idZona" required>
+						<option value="">Seleccionar...</option>
+						<%
+					      	System.out.println("antes del for");
+								for (DtZona dtz : zonas) {
+						%>
 							<option name="optId"><%=dtz.getId()%></option>
-							<%
-					}
-			%>
-						</select>
+						<% } %>
+					</select>
+					<div class="invalid-feedback">
+					    Debe seleccionar una zona
 					</div>
-
-					<div class="col-12 justify-content-center">
-						<button type="submit" class="btn btn-info" style="background-color: #51cf92; color: #fff; border-color: #51cf92">Enviar</button>
-					</div>
+				</div>
+				<div class="form-group align-items-center mt-4">
+					<button type="submit" class="btn btn-warning btn-block" >Enviar</button>
+				</div>
 			</form>
 		</div>
 	</div>

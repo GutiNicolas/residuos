@@ -63,6 +63,10 @@ public class Camiones extends HttpServlet {
 		System.out.println("llamo altaCamion ");
 		icz.altaCamion(mat, idZona);
 		
+		RequestDispatcher rd;
+		rd = request.getRequestDispatcher("/index.jsp");
+		rd.forward(request, response);
+		
 	}
 
 }
