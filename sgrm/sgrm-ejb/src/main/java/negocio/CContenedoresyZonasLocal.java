@@ -16,6 +16,8 @@ public interface CContenedoresyZonasLocal {
 	public List<DtZona> obtenerZonas();
 
 	public String altaCamion(String matricula, long idZona);
+	
+	public List<DtZona> getZonas(List<DtZona> zonas);
 
 
 //	public ArrayList<Zona> getZonas();

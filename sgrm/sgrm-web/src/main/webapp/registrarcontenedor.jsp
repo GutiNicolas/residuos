@@ -51,9 +51,10 @@
 									<label for="exampleFormControlSelect1"><strong>Direccion</strong> <span style="color: #9D9D9D"> Opcional </span></label> 
 									<input type="email" class="form-control mb-4" id="direcont"
 										aria-describedby="emailHelp" placeholder="Ingresar direccion">
-								<div class="col-12 col-md-8 mb-3">
-									<label for="exampleFormControlSelect1"><strong> Tipo de
-										almacenamiento</strong></label>
+								<div >
+									<label for="exampleFormControlSelect1">
+										<strong> Tipo de almacenamiento</strong>
+									</label>
 									<select class="form-control" id="tipocont">
 										<option value="None">Ninguno</option>
 										<option value="1">Pilas</option>
@@ -344,8 +345,10 @@
 						for (var j = 0; j < contens.length; j++) {
 							var cn = contens[j];
 							var cnv = cn.getId().split(".");
-							if (max < cnv[1]) {
-								max = cnv[1];
+							var gran = parseInt(cnv[1], 10);
+							if(max < gran ){
+								max = gran; 
+								
 							}
 						}
 						max++;
@@ -458,7 +461,6 @@
 																		.refresh();
 															});
 											break;
-
 										case 'btnLine':
 											interaction = new ol.interaction.Draw(
 													{
@@ -473,7 +475,6 @@
 																e.feature);
 													});
 											break;
-
 										case 'btnArea':
 											interaction = new ol.interaction.Draw(
 													{

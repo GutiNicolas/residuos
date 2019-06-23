@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -10,14 +11,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import datatypes.DtZona;
+import negocio.CContenedoresyZonasLocal;
 import negocio.CUsuarioRemote;
+import negocio.Zona;
 
 /**
  * Servlet implementation class altaGestor
  */
 @WebServlet("/servletAltaGestor")
 public class altaGestor extends HttpServlet {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+       
+	@EJB
+	CContenedoresyZonasLocal icz;
 	
 	@EJB
 	CUsuarioRemote cur;
@@ -30,27 +37,17 @@ private static final long serialVersionUID = 1L;
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		System.out.println("estoy en el servlet de login");
-		String mail= request.getParameter("email");
-		String pass = request.getParameter("pswd");
-		String nickAdmin = "admin"; // ToDo: obtener el nickname del administrador logeado para pasarlo por parametro
-		boolean exito = cur.altaGestor(mail, pass, nickAdmin);
-		System.out.println("exito:"+exito);
-		RequestDispatcher rl;
-		if (exito) {
-			long idZona = 1; // ToDo: obtener id zona del mapa 
-			String colorZona = "verde"; // ToDo: Obtener color zona del mapa
-			boolean exitoZona = cur.altaZonaGestor(idZona, colorZona, mail);
-			if (exitoZona) {
-				rl = request.getRequestDispatcher("/inicio.html");
-			} else {
-				rl = request.getRequestDispatcher("/altaGestor.html");
-			}
-		} else {
-			rl = request.getRequestDispatcher("/altaGestor.html");
-		}
-		rl.forward(request, response);
+response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		List<DtZona> zonas;
+		List<DtZona> res;
+		System.out.println("estoy en el GET de gestor");
+		res = icz.obtenerZonas();
+		zonas = icz.getZonas(res);
+		request.setAttribute("lstZonas", zonas);			
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/altaGestor.jsp");
+		dispatcher.forward(request, response);
+		
 	}
 
 	/**
@@ -58,7 +55,33 @@ private static final long serialVersionUID = 1L;
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		System.out.println("estoy en el servlet alta gestor");
+		String adminEmail = (String) request.getSession().getAttribute("usulogueado");
+		String nombre= request.getParameter("email");
+		String apellido = request.getParameter("pswd");
+		String ci = request.getParameter("pwdd");
+		System.out.println("ci es -----------------------------------------------> " + ci);
+		String idZona = request.getParameter("cat");
+		long idZon = Long.parseLong(idZona);
+		System.out.println("id zona es -----------------------------------------------> " + idZona);
+		boolean exito = cur.altaGestor(ci, nombre, apellido, adminEmail);
+		System.out.println("exito:"+exito);
+		RequestDispatcher rl;
+		if (exito) { 
+			System.out.println("antes de persistir la zona ");
+			boolean exitoZona = cur.altaZonaGestor(idZon, null, ci);
+			System.out.println("exito:"+exitoZona);
+			if (exitoZona) {
+				rl = request.getRequestDispatcher("/index.jsp");
+				rl.forward(request, response);
+			} else {
+				rl = request.getRequestDispatcher("/altaGestor.jsp");
+				rl.forward(request, response);
+			}
+		} else {
+			rl = request.getRequestDispatcher("/altaGestor.jsp");
+			rl.forward(request, response);
+		}
 	}
 
 }

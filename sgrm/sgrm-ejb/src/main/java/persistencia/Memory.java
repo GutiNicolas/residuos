@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.Root;
 
-
+import datatypes.DtZona;
 import negocio.Administrador;
 import negocio.Contenedor;
 import negocio.Camion;
@@ -118,26 +118,38 @@ public class Memory implements MemoryRemote, MemoryLocal {
 	}
 
 	@Override
-	public boolean altaGestor(String nombre, String apellido, String nickAdmin) {
+	public boolean altaGestor(String ci, String nombre, String apellido, String nickAdmin) {
 		boolean res = false;
+		manager = emf.createEntityManager();
 		Administrador admin = manager.find(Administrador.class, nickAdmin);
-		Gestor usu = new Gestor(nombre, apellido, admin);
+		manager.getTransaction().begin();
+		Gestor usu = new Gestor(ci, nombre, apellido, admin);
 		manager.persist(usu);
-		if (manager.find(Gestor.class, nombre) != null) {
-			res = true;
-		}
+		manager.flush();
+		manager.getTransaction().commit();	
+//		if (manager.find(Gestor.class, nombre) != null) {
+		res = true;
+//		}
+		//manager.getTransaction().commit();
 		return res;
 	}
 
 	@Override
-	public boolean altaZonaGestor(long idZona, ZonaEstado zEstado, String mail) {
+	public boolean altaZonaGestor(long idZona, ZonaEstado zEstado, String ci) {
 		boolean res = false;
-		Gestor usuGestor = manager.find(Gestor.class, mail);
-		Zona zonaGestor = new Zona(idZona, zEstado, usuGestor);
-		manager.persist(zonaGestor);
-		if (manager.find(Zona.class, idZona) != null) {
-			res = true;
-		}
+		manager = emf.createEntityManager();
+		Gestor usuGestor = manager.find(Gestor.class, ci);
+		Zona z = manager.find(Zona.class, idZona);
+		System.out.println("el z geom es: " + z.getGeometry());
+		manager.getTransaction().begin();
+		Zona zonaGestor = new Zona(idZona, z.getGeometry(), usuGestor);
+		manager.merge(zonaGestor);
+		manager.flush();
+		manager.getTransaction().commit();	
+//		manager.flush();
+//		if (manager.find(Zona.class, idZona) != null) {
+		res = true;
+//		}
 		return res;
 	}
 	
@@ -246,7 +258,18 @@ public class Memory implements MemoryRemote, MemoryLocal {
 //	}
 	
 	
-
+	@SuppressWarnings({ "unchecked", "null" })
+	public List<DtZona> getZonas(List<DtZona> zonas) { 
+		List<DtZona> res = new ArrayList();
+		manager = emf.createEntityManager();
+		for (DtZona dtZona : zonas) {
+			Zona zon = manager.find(Zona.class, dtZona.getId());
+			if (zon.getGestor() == null) {
+				res.add(dtZona);
+			}
+		}
+		return res;
+	}
 
 
 }
