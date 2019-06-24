@@ -37,5 +37,4 @@
 <body>
 	<jsp:include page="header.jsp" />
 	<jsp:include page="estadoZonas.html" />
-	
 </html>
