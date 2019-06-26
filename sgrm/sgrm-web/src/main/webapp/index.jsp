@@ -111,10 +111,9 @@ input[type=button], input[type=submit], input[type=reset] {
 
 							<div class="form-row px-3">
 
-								<label for="exampleFormControlSelect1"><i
-									class="fas fa-crosshairs fa-lg ml-2 pr-2"></i> Buscar por
-									localización actual </label> <input type="checkbox" id="myCheck">
-<!-- 								<div class="col-12 col-md-8 mb-3"></div> -->
+								<label for="exampleFormControlSelect1">
+									<i class="fas fa-crosshairs fa-lg ml-2 pr-2"></i> 
+										Buscar por localización actual </label> <input type="checkbox" id="myCheck">
 
 								<div class="col-12 mb-2">
 <!-- 									<input id="clickMe3" type="button" value="Buscar" -->

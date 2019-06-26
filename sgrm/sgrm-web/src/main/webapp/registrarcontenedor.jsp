@@ -38,6 +38,18 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
+	
+		<% if (request.getSession().getAttribute("usulogueado")==null) { %>
+		<div class="container mt-20"> 
+			<jsp:include page="accesoDenegado.html" />
+		</div>
+	<% } else {
+		if (!(request.getSession().getAttribute("rol").toString().equals("admin"))) { %>
+			<div class="container"> 
+			<jsp:include page="accesoDenegado.html" />
+			</div>
+		<%} else { %>
+	
 	<div id="container">
 		<div class="row">
 			<div class="col-12 col-md-4">
@@ -587,5 +599,6 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 		crossorigin="anonymous"></script>
+<%}} %>
 </body>
 </html>
