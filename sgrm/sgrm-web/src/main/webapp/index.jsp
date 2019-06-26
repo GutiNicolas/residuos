@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@page import="java.net.InetAddress"%>
+<%@page import="java.net.UnknownHostException"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +13,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" type="image/png"
 	href="resources/assets/images/icons/favicon.ico" />
-<link rel="stylesheet" href="/geoserver/style.css" type="text/css" />
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet"
@@ -46,6 +47,22 @@ input[type=button], input[type=submit], input[type=reset] {
 
 </head>
 <body>
+	<%
+		InetAddress ip;
+	  try {
+
+		ip = InetAddress.getLocalHost();
+		String ipHostAddr = String.format(ip.getHostAddress());
+		session.setAttribute("ip", ipHostAddr);
+		System.out.println("Current IP address : " + ip.getHostAddress());
+
+	  } catch (UnknownHostException e) {
+
+		e.printStackTrace();
+
+	  }
+	
+	 %>
 	<jsp:include page="header.jsp" />
 	<div id="container">
 		<div class="row pt-10">
@@ -152,6 +169,7 @@ input[type=button], input[type=submit], input[type=reset] {
 	</div>
 
 	<script type="text/javascript">
+		var localhost = "<%=session.getAttribute("ip")%>";
 		var map;
 		proj4.defs('EPSG:32721',
 				'+proj=utm +zone=21 +south +datum=WGS84 +units=m +no_defs');
@@ -170,7 +188,7 @@ input[type=button], input[type=submit], input[type=reset] {
 
 		var sourceWFS = new ol.source.Vector({
 			loader : function(extent, resolution, projection) {
-				var url = "http://localhost:8081/geoserver/wfs?service=WFS"
+				var url = "http://" + localhost + ":8081/geoserver/wfs?service=WFS"
 						+ "&version=2.0.0&request=GetFeature"
 						+ '&outputFormat=text/javascript'
 						+ "&typename=cite:contenedor"
@@ -203,7 +221,7 @@ input[type=button], input[type=submit], input[type=reset] {
 
 		var sourceCWFS = new ol.source.Vector({
 			loader : function(extent, resolution, projection) {
-				var url = "http://localhost:8081/geoserver/wfs?service=WFS"
+				var url = "http://" + localhost + ":8081/geoserver/wfs?service=WFS"
 						+ "&version=2.0.0&request=GetFeature"
 						+ '&outputFormat=text/javascript'
 						+ "&typename=cite:v_mdg_vias"
@@ -241,7 +259,7 @@ input[type=button], input[type=submit], input[type=reset] {
 				new ol.layer.Image({
 					visible : false, //NO ESTA VISIBLE
 					source : new ol.source.ImageWMS({
-						url : 'http://localhost:8080/geoserver/wms?',
+						url : 'http://' + localhost + ':8080/geoserver/wms?',
 						params : {
 							'LAYERS' : 'cite:sig_comunales'
 						},
@@ -253,7 +271,7 @@ input[type=button], input[type=submit], input[type=reset] {
 				new ol.layer.Image({
 					visible : false,
 					source : new ol.source.ImageWMS({
-						url : 'http://localhost:8080/geoserver/wms?',
+						url : 'http://' + localhost + ':8080/geoserver/wms?',
 						params : {
 							'LAYERS' : 'cite:v_ep_residuos_decaux'
 						},
@@ -266,7 +284,7 @@ input[type=button], input[type=submit], input[type=reset] {
 							visible : false,
 							source : new ol.source.Vector(
 									{
-										url : 'http://localhost:8080/geoserver/wfs?request=getFeature&typeName=cite:v_ep_residuos_decaux&srs=EPSG:32721&outputFormat=application/json',
+										url : 'http://' + localhost + ':8080/geoserver/wfs?request=getFeature&typeName=cite:v_ep_residuos_decaux&srs=EPSG:32721&outputFormat=application/json',
 										format : new ol.format.GeoJSON()
 									})
 						}),
@@ -275,7 +293,7 @@ input[type=button], input[type=submit], input[type=reset] {
 							visible : true,
 							source : new ol.source.Vector(
 									{
-										url : 'http://localhost:8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:32721&outputFormat=application/json',
+										url : 'http://' + localhost + ':8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:32721&outputFormat=application/json',
 										format : new ol.format.GeoJSON()
 									})
 						}), layerCWFS, layerWFS ];
@@ -704,7 +722,7 @@ input[type=button], input[type=submit], input[type=reset] {
 			}
 			s = new XMLSerializer();
 			str = s.serializeToString(node);
-			$.ajax('http://localhost:8081/geoserver/wfs', {
+			$.ajax('http://' + localhost + ':8081/geoserver/wfs', {
 				type : 'POST',
 				dataType : 'xml',
 				processData : false,
@@ -728,7 +746,7 @@ input[type=button], input[type=submit], input[type=reset] {
 			});
 			var zonitas;
 			fetch(
-					'http://localhost:8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:4326&outputFormat=application/json')
+					'http://' + localhost + ':8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:4326&outputFormat=application/json')
 					.then(function(response) {
 						return response.json();
 					}).then(function(json) {
@@ -772,7 +790,7 @@ input[type=button], input[type=submit], input[type=reset] {
 			max++;
 			// USAR max+1
 			let qrcode = new QRCode("codigoqr", {
-				text : "http://localhost:8080/sgrm-web/reportarContenedor?id="
+				text : "http://" + localhost + ":8080/sgrm-web/reportarContenedor?id="
 						+ max,
 				width : 177,
 				height : 177,

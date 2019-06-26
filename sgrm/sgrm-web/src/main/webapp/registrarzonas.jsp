@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="UTF-8"%>
+<%@page import="java.net.InetAddress"%>
+<%@page import="java.net.UnknownHostException"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,6 +25,22 @@
 	<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
 </head>
 <body>
+	<%
+		InetAddress ip;
+	  try {
+
+		ip = InetAddress.getLocalHost();
+		String ipHostAddr = String.format(ip.getHostAddress());
+		session.setAttribute("ip", ipHostAddr);
+		System.out.println("Current IP address : " + ip.getHostAddress());
+
+	  } catch (UnknownHostException e) {
+
+		e.printStackTrace();
+
+	  }
+	
+	 %>
 	<jsp:include page="header.jsp" />
 		<% if (request.getSession().getAttribute("usulogueado")==null) { %>
 		<div class="container mt-20"> 
@@ -82,6 +100,7 @@
 	<script type="text/javascript">
 		   
 	var map;
+	var localhost = "<%=session.getAttribute("ip")%>";
 	proj4.defs('EPSG:32721','+proj=utm +zone=21 +south +datum=WGS84 +units=m +no_defs');
 	ol.proj.proj4.register(proj4);
 	var pronos =  ol.proj.get('EPSG:32721');
@@ -100,7 +119,7 @@
 
 		var sourceWFS = new ol.source.Vector({
 		    loader: function (extent, resolution, projection) {
-		        var url = "http://localhost:8081/geoserver/wfs?service=WFS"
+		        var url = "http://" + localhost + ":8081/geoserver/wfs?service=WFS"
 		                + "&version=2.0.0&request=GetFeature"
 		                + '&outputFormat=text/javascript'
 		                + "&typename=cite:zona"
@@ -132,7 +151,7 @@
         new ol.layer.Image({
             visible: false, //NO ESTA VISIBLE
             source: new ol.source.ImageWMS({
-                url: 'http://localhost:8080/geoserver/wms?',
+                url: 'http://' + localhost + ':8080/geoserver/wms?',
                 params: {'LAYERS': 'cite:sig_comunales'},
                 serverType: 'geoserver',
                 crossOrigin: 'anonymous'
@@ -142,7 +161,7 @@
         new ol.layer.Image({
             visible: false,
             source: new ol.source.ImageWMS({
-                url: 'http://localhost:8080/geoserver/wms?',
+                url: 'http://' + localhost + ':8080/geoserver/wms?',
                 params: {'LAYERS': 'cite:v_ep_residuos_decaux'},
                 serverType: 'geoserver',
                 crossOrigin: 'anonymous'
@@ -151,7 +170,7 @@
         new ol.layer.Vector({
             visible: true,
         	source: new ol.source.Vector({
-            	url: 'http://localhost:8081/geoserver/wfs?request=getFeature&typeName=cite:contenedor&srs=EPSG:32721&outputFormat=application/json',
+            	url: 'http://' + localhost + ':8081/geoserver/wfs?request=getFeature&typeName=cite:contenedor&srs=EPSG:32721&outputFormat=application/json',
             	format: new ol.format.GeoJSON()
         	})
     	}),
@@ -237,7 +256,7 @@
     }
     s = new XMLSerializer();
     str = s.serializeToString(node);
-    $.ajax('http://localhost:8081/geoserver/wfs', {
+    $.ajax('http://' + localhost + ':8081/geoserver/wfs', {
         type: 'POST',
         dataType: 'xml',
         processData: false,
@@ -259,7 +278,7 @@ function pertenece (e) {
 	var format = new ol.format.GeoJSON();
 	var puntoturf = format.writeFeatureObject(e, {'featureProjection': 'EPSG:4326'});
 	var zonitas;
-	fetch('http://localhost:8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:4326&outputFormat=application/json').then(function(response) {
+	fetch('http://' + localhost + ':8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:4326&outputFormat=application/json').then(function(response) {
 	        return response.json();
 	      }).then(function(json) {
 	        var areturn = '';

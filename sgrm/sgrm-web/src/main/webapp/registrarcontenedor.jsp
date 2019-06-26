@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@page import="java.net.InetAddress"%>
+<%@page import="java.net.UnknownHostException"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,6 +39,23 @@
 <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
 </head>
 <body>
+	<%
+		InetAddress ip;
+	  try {
+
+		ip = InetAddress.getLocalHost();
+		String ipHostAddr = String.format(ip.getHostAddress());
+		session.setAttribute("ip", ipHostAddr);
+		System.out.println("Current IP address : " + ip.getHostAddress());
+
+	  } catch (UnknownHostException e) {
+
+		e.printStackTrace();
+
+	  }
+	
+	 %>
+	 
 	<jsp:include page="header.jsp" />
 	
 		<% if (request.getSession().getAttribute("usulogueado")==null) { %>
@@ -108,6 +127,7 @@
 				<div id="infoCont"></div>
 
 				<script type="text/javascript">
+					var localhost = "<%=session.getAttribute("ip")%>";
 					var map;
 					proj4
 							.defs('EPSG:32721',
@@ -129,7 +149,7 @@
 							{
 								loader : function(extent, resolution,
 										projection) {
-									var url = "http://localhost:8081/geoserver/wfs?service=WFS"
+									var url = "http://" + localhost + ":8081/geoserver/wfs?service=WFS"
 											+ "&version=2.0.0&request=GetFeature"
 											+ '&outputFormat=text/javascript'
 											+ "&typename=cite:contenedor"
@@ -168,7 +188,7 @@
 										visible : false, //NO ESTA VISIBLE
 										source : new ol.source.ImageWMS(
 												{
-													url : 'http://localhost:8080/geoserver/wms?',
+													url : 'http://' + localhost + ':8080/geoserver/wms?',
 													params : {
 														'LAYERS' : 'cite:sig_comunales'
 													},
@@ -182,7 +202,7 @@
 										visible : false,
 										source : new ol.source.ImageWMS(
 												{
-													url : 'http://localhost:8080/geoserver/wms?',
+													url : 'http://' + localhost + ':8080/geoserver/wms?',
 													params : {
 														'LAYERS' : 'cite:v_ep_residuos_decaux'
 													},
@@ -195,7 +215,7 @@
 										visible : false,
 										source : new ol.source.Vector(
 												{
-													url : 'http://localhost:8080/geoserver/wfs?request=getFeature&typeName=cite:v_ep_residuos_decaux&srs=EPSG:32721&outputFormat=application/json',
+													url : 'http://' + localhost + ':8080/geoserver/wfs?request=getFeature&typeName=cite:v_ep_residuos_decaux&srs=EPSG:32721&outputFormat=application/json',
 													format : new ol.format.GeoJSON()
 												})
 									}),
@@ -204,7 +224,7 @@
 										visible : true,
 										source : new ol.source.Vector(
 												{
-													url : 'http://localhost:8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:32721&outputFormat=application/json',
+													url : 'http://' + localhost + ':8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:32721&outputFormat=application/json',
 													format : new ol.format.GeoJSON()
 												})
 									}), layerWFS ];
@@ -287,7 +307,7 @@
 						}
 						s = new XMLSerializer();
 						str = s.serializeToString(node);
-						$.ajax('http://localhost:8081/geoserver/wfs', {
+						$.ajax('http://' + localhost + ':8081/geoserver/wfs', {
 							type : 'POST',
 							dataType : 'xml',
 							processData : false,
@@ -311,7 +331,7 @@
 						});
 						var zonitas;
 						fetch(
-								'http://localhost:8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:4326&outputFormat=application/json')
+								'http://' + localhost + ':8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:4326&outputFormat=application/json')
 								.then(function(response) {
 									return response.json();
 								})
@@ -368,7 +388,7 @@
 						let qrcode = new QRCode(
 								"codigoqr",
 								{
-									text : "http://localhost:8080/sgrm-web/reportarContenedor?id="
+									text : "http://' + localhost + ':8080/sgrm-web/reportarContenedor?id="
 											+ max,
 									width : 177,
 									height : 177,
