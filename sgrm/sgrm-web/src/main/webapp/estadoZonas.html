@@ -1,3 +1,5 @@
+<%@page import="java.net.InetAddress"%>
+<%@page import="java.net.UnknownHostException"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,6 +33,23 @@
 <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
 </head>
 <body>
+	<%
+		InetAddress ipAddr;
+	  try {
+
+		ipAddr = InetAddress.getLocalHost();
+		String ipHostAddr = String.format(ipAddr.getHostAddress());
+		session.setAttribute("ipAddr", ipHostAddr);
+		System.out.println("Current IP address : " + ip.getHostAddress());
+
+	  } catch (UnknownHostException e) {
+
+		e.printStackTrace();
+
+	  }
+	
+	 %>
+	 
 <div id="container">
 		<div id="map" class="map"></div>
 		<button id="btnEdit2"
@@ -45,6 +64,7 @@
 
 		<script type="text/javascript">
 			var map;
+			var localhost = "<%=session.getAttribute("ip")%>";
 			proj4.defs('EPSG:32721',
 					'+proj=utm +zone=21 +south +datum=WGS84 +units=m +no_defs');
 			ol.proj.proj4.register(proj4);
@@ -62,7 +82,7 @@
 
 			var sourcecWFS = new ol.source.Vector({
 				loader : function(extent, resolution, projection) {
-					var url = "http://localhost:8081/geoserver/wfs?service=WFS"
+					var url = "http://" + localhost + ":8081/geoserver/wfs?service=WFS"
 							+ "&version=2.0.0&request=GetFeature"
 							+ '&outputFormat=text/javascript'
 							+ "&typename=cite:contenedor"
@@ -79,7 +99,7 @@
 
 			var sourcezWFS = new ol.source.Vector({
 				loader : function(extent, resolution, projection) {
-					var url = "http://localhost:8081/geoserver/wfs?service=WFS"
+					var url = "http://" + localhost + ":8081/geoserver/wfs?service=WFS"
 							+ "&version=2.0.0&request=GetFeature"
 							+ '&outputFormat=text/javascript'
 							+ "&typename=cite:zona"
@@ -292,7 +312,7 @@
 				}
 				s = new XMLSerializer();
 				str = s.serializeToString(node);
-				$.ajax('http://localhost:8081/geoserver/wfs', {
+				$.ajax('http://' + localhost + ':8081/geoserver/wfs', {
 					type : 'POST',
 					dataType : 'xml',
 					processData : false,
@@ -316,7 +336,7 @@
 				});
 				var zonitas;
 				fetch(
-						'http://localhost:8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:4326&outputFormat=application/json')
+						'http://' + localhost + ':8081/geoserver/wfs?request=getFeature&typeName=cite:zona&srs=EPSG:4326&outputFormat=application/json')
 						.then(function(response) {
 							return response.json();
 						})
