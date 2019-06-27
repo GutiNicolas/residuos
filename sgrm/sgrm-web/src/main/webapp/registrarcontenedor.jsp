@@ -352,7 +352,7 @@
 															.split(".");
 													e.set('tresiduos', tipoVal);
 													e.set('cestado', 2);
-													e.set('zona_idzona',
+													e.set('zona_id',
 															splited[1]);
 													e
 															.set('zona_id',
@@ -388,7 +388,7 @@
 						let qrcode = new QRCode(
 								"codigoqr",
 								{
-									text : "http://' + localhost + ':8080/sgrm-web/reportarContenedor?id="
+									text : "http://" + localhost + ":8080/sgrm-web/reportarContenedor?id="
 											+ max,
 									width : 177,
 									height : 177,
@@ -592,7 +592,7 @@
 																				.item(
 																						0)
 																				.get(
-																						'zona_idzona');
+																						'zona_id');
 															});
 											map.addInteraction(interaction);
 											break;

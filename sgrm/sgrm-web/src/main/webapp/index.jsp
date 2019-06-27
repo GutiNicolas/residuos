@@ -762,7 +762,7 @@ input[type=button], input[type=submit], input[type=reset] {
 								splited = zon.getId().split(".");
 								e.set('tresiduos', tipoVal);
 								e.set('cestado', 2);
-								e.set('zona_idzona', splited[1]);
+								e.set('zona_id', splited[1]);
 								transactWFS('insert', e);
 								return;
 							}
@@ -971,7 +971,7 @@ input[type=button], input[type=submit], input[type=reset] {
 																+ e.target
 																		.item(0)
 																		.get(
-																				'zona_idzona')
+																				'zona_id')
 																+ '<br /> ID: '
 																+ e.target
 																		.item(0)

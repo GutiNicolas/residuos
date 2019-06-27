@@ -53,6 +53,7 @@ button[type=submit] {
 			<form class="was-validated" action="reportarContenedor" method="post">
 				<div class="form-group">  		  
 			    	<h5>Estado en el que se encuentra</h5>
+			    	<input  type="hidden" id="idcont" name="idcont" value="<%=request.getAttribute("idareportar")%>">
 			    	
 			    	  <div class="form-group">
 					    <select class="custom-select" id="estadoCont" name="estado" required>

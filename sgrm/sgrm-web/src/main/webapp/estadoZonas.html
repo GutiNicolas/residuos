@@ -1,5 +1,3 @@
-<%@page import="java.net.InetAddress"%>
-<%@page import="java.net.UnknownHostException"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +6,6 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="/geoserver/style.css" type="text/css" />
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" type="text/css"
@@ -33,22 +30,7 @@
 <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
 </head>
 <body>
-	<%
-		InetAddress ipAddr;
-	  try {
 
-		ipAddr = InetAddress.getLocalHost();
-		String ipHostAddr = String.format(ipAddr.getHostAddress());
-		session.setAttribute("ipAddr", ipHostAddr);
-		System.out.println("Current IP address : " + ip.getHostAddress());
-
-	  } catch (UnknownHostException e) {
-
-		e.printStackTrace();
-
-	  }
-	
-	 %>
 	 
 <div id="container">
 		<div id="map" class="map"></div>
@@ -60,11 +42,12 @@
 			class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
 			<i class="material-icons">info</i>
 		</button>
+		
 		<div id="infoCont2"></div>
 
 		<script type="text/javascript">
 			var map;
-			var localhost = "<%=session.getAttribute("ip")%>";
+			var localhost = "<%=session.getAttribute("ipAddr")%>";
 			proj4.defs('EPSG:32721',
 					'+proj=utm +zone=21 +south +datum=WGS84 +units=m +no_defs');
 			ol.proj.proj4.register(proj4);

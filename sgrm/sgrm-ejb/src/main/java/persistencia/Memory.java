@@ -155,7 +155,10 @@ public class Memory implements MemoryRemote, MemoryLocal {
 	
 	public boolean modificarEstadoContenedor(Contenedor cont) {
 		try {
-			mng.merge(cont);
+			manager.getTransaction().begin();
+			manager.merge(cont);
+			manager.getTransaction().commit();	
+			//mng.merge(cont);
 			return true;
 		}catch (Exception e) {
 			System.out.println("Error Modificando el estado: " + e);
